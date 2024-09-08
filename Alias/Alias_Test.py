@@ -16,6 +16,3 @@ def test_alias_structure(probs,times):
 if __name__ == '__main__':
     dice_list = [3 / 10, 2 / 10, 2 / 10, 2 / 10, 1 / 10]
     test_alias_structure(dice_list, 1000000)
-
-    dice_list = [1/5, 1/5, 1/5, 1/5, 1/5]
-    test_alias_structure(dice_list, 1000000)
