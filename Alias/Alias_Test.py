@@ -14,5 +14,7 @@ def test_alias_structure(probs,times):
         print(f"{v[0]} index sampled {v[1]} times")
 
 if __name__ == '__main__':
-    dice_list = [3 / 10, 2 / 10, 2 / 10, 2 / 10, 1 / 10]
+    # dice_list = [3 / 10, 2 / 10, 2 / 10, 2 / 10, 1 / 10]
+    # test_alias_structure(dice_list, 1000000)
+    dice_list = [3/10,7/10]
     test_alias_structure(dice_list, 1000000)
