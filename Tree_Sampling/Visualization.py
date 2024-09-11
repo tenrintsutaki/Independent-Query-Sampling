@@ -1,6 +1,6 @@
 # 绘制二叉树的递归函数
 from matplotlib import pyplot as plt
-from Tree import TreeNode
+from TreeNode import TreeNode
 def plot_tree(node, x=0, y=0, layer=1, dx=1):
     if node is not None:
         # 在当前节点位置绘制节点值

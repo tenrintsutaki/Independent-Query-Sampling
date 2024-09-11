@@ -1,5 +1,6 @@
 from TreeNode import TreeNode
 class BinarySearchTree:
+    # Implement a tree with sampling
     def __init__(self):
         self.root = None
     def insert(self, key):
