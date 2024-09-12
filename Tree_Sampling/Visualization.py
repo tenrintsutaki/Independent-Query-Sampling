@@ -1,7 +1,7 @@
 # 绘制二叉树的递归函数
 from matplotlib import pyplot as plt
 from TreeNode import TreeNode
-from Sampling import calculate_weight,find_canonical_nodes
+from Sampling import *
 
 def plot_tree(node, canonical, x=0, y=0, layer=1, dx=1):
     if node is not None:
@@ -54,3 +54,5 @@ if __name__ == '__main__':
     for item in canonical:
         print(item.val)
     visualize_tree(root,canonical)
+    basic_sampling_preprocess(canonical,weights)
+    print(basic_sampling(canonical,100))

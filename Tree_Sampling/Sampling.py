@@ -1,3 +1,5 @@
+import random
+
 from TreeNode import TreeNode
 
 def calculate_weight(root):
@@ -54,5 +56,12 @@ def basic_sampling_preprocess(canonical_nodes,weights):
     for node in canonical_nodes: # Normalize the sample weight
         node.sample_weight = node.weight / sum_weight
 
-def basic_sampling(canonical_nodes):
-    pass
+def basic_sampling(canonical_nodes,times):
+    # canonical_nodes:[node 1,node 2,node 3,...,node n]
+    # weights: [w1,w2,w3,w4]
+    prob_list = []
+
+    for i in range(len(canonical_nodes)):
+            prob_list.append(canonical_nodes[i].weight)
+    sample = random.choices(canonical_nodes, weights=prob_list, k=times)  # 根据权重进行随机采样
+    return sample  # Return sampled value
