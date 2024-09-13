@@ -65,3 +65,13 @@ def basic_sampling(canonical_nodes,times):
             prob_list.append(canonical_nodes[i].weight)
     sample = random.choices(canonical_nodes, weights=prob_list, k=times)  # 根据权重进行随机采样
     return sample  # Return sampled value
+
+def leaf_sampling(node):
+    if not node.left and not node.right:
+        return node
+    if not node.left:
+        return leaf_sampling(node.right)
+    if not node.right:
+        return leaf_sampling(node.left)
+    selected_child = random.choices([node.left, node.right], weights=[node.left.weight, node.right.weight], k=1)[0]
+    return leaf_sampling(selected_child)

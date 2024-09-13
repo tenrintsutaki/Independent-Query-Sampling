@@ -1,4 +1,6 @@
 # 绘制二叉树的递归函数
+from collections import defaultdict
+
 from matplotlib import pyplot as plt
 from TreeNode import TreeNode
 from Sampling import *
@@ -37,7 +39,7 @@ def visualize_tree(root,canonical):
     plt.show()
 
 if __name__ == '__main__':
-    # 示例：构建一棵简单的二叉树
+    times_dict = defaultdict(int)
     root = TreeNode(val = 10)
     root.left = TreeNode(val = 4)
     root.right = TreeNode(val = 15)
@@ -50,9 +52,11 @@ if __name__ == '__main__':
     root.right.right.right = TreeNode(val=5, weight = 0.3)
     calculate_weight(root)
     # 可视化二叉树
-    canonical,weights = find_canonical_nodes(root,1,4)
-    for item in canonical:
-        print(item.val)
+    canonical,weights = find_canonical_nodes(root,2,4)
     visualize_tree(root,canonical)
     basic_sampling_preprocess(canonical,weights)
-    print(basic_sampling(canonical,100))
+    sampled_nodes = basic_sampling(canonical,10000)
+    for node in sampled_nodes:
+        times_dict[leaf_sampling(node).val] += 1
+    for key,value in times_dict.items():
+        print(f"{key} index sampled {value} times")
