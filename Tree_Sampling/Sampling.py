@@ -37,7 +37,7 @@ def find_canonical_nodes(root, x, y):
         # Remove the right and left children after add their parent
         if left_canonical and right_canonical:
             canonical_nodes.append(node)
-            if node.left:
+            if node.left: # 去除子节点，避免重复的情况
                 canonical_nodes.remove(node.left)
             if node.right:
                 canonical_nodes.remove(node.right)
