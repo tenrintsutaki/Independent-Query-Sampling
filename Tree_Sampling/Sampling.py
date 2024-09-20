@@ -11,7 +11,10 @@ def calculate_weight(root):
     root.weight = left_weight + right_weight + root.weight # Calculate the weight
     return root.weight
 
-def find_canonical_nodes(root, x, y):
+def find_canonical_nodes(root, x, y): # 添加Search Key
+    # Find the left path and the right path......
+    # 左拐和右拐的情况
+    # Data Size - 1GB
     canonical_nodes = []
     weights = []
 
@@ -21,7 +24,7 @@ def find_canonical_nodes(root, x, y):
             return True  # 空节点视作满足条件
 
         # 叶子节点：没有左右子节点
-        if not node.left and not node.right:
+        if not node.left and not node.right: # 待修改，加速
             if x <= node.val <= y:
                 canonical_nodes.append(node)
                 weights.append(node.weight)

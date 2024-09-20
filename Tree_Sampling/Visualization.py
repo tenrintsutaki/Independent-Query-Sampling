@@ -52,7 +52,7 @@ if __name__ == '__main__':
     root.right.right.right = TreeNode(val = 5, weight = 0.3)
     calculate_weight(root)
     # 可视化二叉树
-    canonical,weights = find_canonical_nodes(root,1,4)
+    canonical,weights = find_canonical_nodes(root,1,5)
     visualize_tree(root,canonical)
     basic_sampling_preprocess(canonical,weights)
     sampled_nodes = basic_sampling(canonical,10000)
