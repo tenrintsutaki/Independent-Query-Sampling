@@ -4,6 +4,9 @@ from collections import defaultdict
 from matplotlib import pyplot as plt
 from TreeNode import TreeNode
 from Sampling import *
+from Tree_Sampling.Tools import calculate_weight
+from Tools import update_internal_nodes
+
 
 def plot_tree(node, canonical, x=0, y=0, layer=1, dx=1):
     if node is not None:
@@ -51,6 +54,7 @@ if __name__ == '__main__':
     root.right.left.right = TreeNode(val = 4, weight = 0.2)
     root.right.right.right = TreeNode(val = 5, weight = 0.3)
     calculate_weight(root)
+    update_internal_nodes(root)
     # 可视化二叉树
     canonical,weights = find_canonical_nodes(root,1,5)
     visualize_tree(root,canonical)

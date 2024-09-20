@@ -1,16 +1,4 @@
 import random
-
-from TreeNode import TreeNode
-
-def calculate_weight(root):
-    if not root:
-        return 0
-    # Post - Order Traverse
-    left_weight = calculate_weight(root.left)
-    right_weight = calculate_weight(root.right)
-    root.weight = left_weight + right_weight + root.weight # Calculate the weight
-    return root.weight
-
 def find_canonical_nodes(root, x, y): # 添加Search Key
     # Find the left path and the right path......
     # 左拐和右拐的情况
