@@ -4,8 +4,7 @@ from collections import defaultdict
 from matplotlib import pyplot as plt
 from TreeNode import TreeNode
 from Sampling import *
-from Tree_Sampling.Tools import calculate_weight
-from Tools import update_internal_nodes,traverse_path
+from Sample_Tools import update_internal_nodes,traverse_path,calculate_weight
 
 
 def plot_tree(node, canonical, x=0, y=0, layer=1, dx=1):
@@ -17,7 +16,7 @@ def plot_tree(node, canonical, x=0, y=0, layer=1, dx=1):
             color = "skyblue"
         plt.text(x, y, str(node.val), ha='center', va='center', fontsize=12,
                  bbox=dict(facecolor=color, edgecolor='black', boxstyle='circle,pad=0.5'))
-        plt.text(x + 0.3, y, "w=" + str(node.weight), ha='center', va='center', fontsize=12)
+        # plt.text(x + 0.3, y, "w=" + str(node.weight), ha='center', va='center', fontsize=12)
 
         # 如果有左子节点，计算左子节点的位置并绘制线条和递归调用
         if node.left:
@@ -43,23 +42,29 @@ def visualize_tree(root,canonical):
 
 if __name__ == '__main__':
     times_dict = defaultdict(int)
-    root = TreeNode(val = 10)
-    root.left = TreeNode(val = 4)
-    root.right = TreeNode(val = 15)
-    root.left.left = TreeNode(val = 1, weight = 0.15)
-    root.left.right = TreeNode(val = 2, weight = 0.15)
-    root.right.left = TreeNode(val = 6)
-    root.right.right = TreeNode(val = 7)
-    root.right.left.left = TreeNode(val = 3, weight = 0.2)
-    root.right.left.right = TreeNode(val = 4, weight = 0.2)
-    root.right.right.right = TreeNode(val = 5, weight = 0.3)
+    root = TreeNode()
+    root.left = TreeNode()
+    root.right = TreeNode()
+    root.left.left = TreeNode()
+    root.left.left.left = TreeNode(val=1, weight=0.1)
+    root.left.left.right = TreeNode(val=4, weight=0.1)
+    root.left.right = TreeNode()
+    root.left.right.left = TreeNode(val=7, weight=0.15)
+    root.left.right.right = TreeNode(val=8, weight=0.15)
+    root.right.left = TreeNode()
+    root.right.right = TreeNode()
+    root.right.left.left = TreeNode(val = 9, weight = 0.1)
+    root.right.left.right = TreeNode(val = 11, weight = 0.1)
+    root.right.right.left = TreeNode(val=12, weight=0.1)
+    root.right.right.right = TreeNode(val = 13, weight = 0.1)
     calculate_weight(root)
     update_internal_nodes(root)
-    path = traverse_path(root,4)
-    for node in path:
-        print(node.val, node.weight)
+    # path = traverse_path(root,1)
+    # for node in path:
+    #     print(node.val, node.weight)
     # 可视化二叉树
-    canonical,weights = find_canonical_nodes(root,1,4)
+
+    canonical,weights = find_canonical_nodes_new(root,4,12)
     visualize_tree(root,canonical)
     basic_sampling_preprocess(canonical,weights)
     sampled_nodes = basic_sampling(canonical,10000)

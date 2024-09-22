@@ -1,11 +1,11 @@
 import random
+from Sample_Tools import traverse_path
 def find_canonical_nodes(root, x, y): # 添加Search Key
     # Find the left path and the right path......
     # 左拐和右拐的情况
     # Data Size - 1GB
     canonical_nodes = []
     weights = []
-
     # 递归函数来遍历树，返回是否子树的所有叶子节点都属于Canonical节点
     def dfs(node):
         if not node:
@@ -66,3 +66,19 @@ def leaf_sampling(node):
         return leaf_sampling(node.left)
     selected_child = random.choices([node.left, node.right], weights=[node.left.weight, node.right.weight], k=1)[0]
     return leaf_sampling(selected_child)
+
+def find_canonical_nodes_new(root,x,y):
+    """Updated methods for finding canonical nodes"""
+    nodes_left,weights_left,removed_left = traverse_path(root,x,"L")
+    nodes_right,weights_right,removed_right = traverse_path(root,y,"R")
+
+    nodes_left.extend(nodes_right)
+    weights_left.extend(weights_right)
+    removed_left.extend(removed_right)
+
+    # nodes_left.remove(removed_left)
+    for node in removed_left:# Remove the node that not been removed in a new direction
+        if node in nodes_left:
+            nodes_left.remove(node)
+
+    return nodes_left, weights_left
