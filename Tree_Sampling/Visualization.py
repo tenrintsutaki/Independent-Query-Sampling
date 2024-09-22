@@ -6,7 +6,6 @@ from TreeNode import TreeNode
 from Sampling import *
 from Sample_Tools import update_internal_nodes,traverse_path,calculate_weight
 
-
 def plot_tree(node, canonical, x=0, y=0, layer=1, dx=1):
     if node is not None:
         # 在当前节点位置绘制节点值
@@ -31,7 +30,6 @@ def plot_tree(node, canonical, x=0, y=0, layer=1, dx=1):
             new_y = y - 1
             plt.plot([x, new_x], [y, new_y], 'k-')
             plot_tree(node.right, canonical, new_x, new_y, layer + 1, dx)
-
 
 # 主函数，初始化二叉树并可视化
 def visualize_tree(root,canonical):
@@ -59,6 +57,7 @@ if __name__ == '__main__':
     root.right.right.right = TreeNode(val = 13, weight = 0.1)
     calculate_weight(root)
     update_internal_nodes(root)
+
     # path = traverse_path(root,1)
     # for node in path:
     #     print(node.val, node.weight)
