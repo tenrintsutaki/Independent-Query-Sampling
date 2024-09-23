@@ -19,11 +19,11 @@ def construct_special_bst(sorted_array,weights,leaf_index = 0):
     if len(sorted_array) == 1: # For leaf nodes
         weight = weights[leaf_index]
         leaf_index = leaf_index + 1
-        return TreeNode(val=sorted_array[0],weight=weight), leaf_index
+        return TreeNode(val=sorted_array[0], weight=weight), leaf_index
 
     mid = len(sorted_array) // 2
-    left_child,leaf_index = construct_special_bst(sorted_array[:mid],weights,leaf_index)
-    right_child,leaf_index = construct_special_bst(sorted_array[mid:],weights,leaf_index)
+    left_child,leaf_index  = construct_special_bst(sorted_array[:mid], weights, leaf_index)
+    right_child,leaf_index = construct_special_bst(sorted_array[mid:], weights, leaf_index)
     root = TreeNode()
     root.val = find_min_in_right_subtree(right_child)
     root.left = left_child
@@ -41,7 +41,7 @@ if __name__ == '__main__':
     num_nodes = 2500000
     random_list = random_tree_assigned(num_nodes)
     weights = generate_random_weights(num_nodes)
-    root = construct_special_bst(random_list,weights,0)
+    root,leaf_index = construct_special_bst(random_list,weights,0)
     process = psutil.Process(os.getpid())
     memory_info = process.memory_info()
     print(f"当前程序的内存占用大小: {memory_info.rss / (1024 * 1024):.2f} MB")
