@@ -1,8 +1,6 @@
 def find_min_in_right_subtree(node):
     """帮助函数，用于找到右子树中的最小值"""
-    if not node:
-        return float('inf')  # 如果节点为空，返回无穷大
-    while node.left:  # 迭代到最左边的节点
+    while node.left:
         node = node.left
     return node.val
 
