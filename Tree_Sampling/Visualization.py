@@ -15,7 +15,7 @@ def plot_tree(node, canonical, x=0, y=0, layer=1, dx=1):
             color = "skyblue"
         plt.text(x, y, str(node.val), ha='center', va='center', fontsize=12,
                  bbox=dict(facecolor=color, edgecolor='black', boxstyle='circle,pad=0.5'))
-        # plt.text(x + 0.3, y, "w=" + str(node.weight), ha='center', va='center', fontsize=12)
+        plt.text(x + 0.3, y, "w=" + str(node.weight), ha='center', va='center', fontsize=12)
 
         # 如果有左子节点，计算左子节点的位置并绘制线条和递归调用
         if node.left:
