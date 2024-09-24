@@ -24,8 +24,9 @@ if __name__ == '__main__':
     process = psutil.Process(os.getpid())
     memory_info = process.memory_info()
     print(f"Memory Usage: {memory_info.rss / (1024 * 1024):.2f} MB")
-    canonical, weights = find_canonical_nodes_new(root, 1000, 100000) # Find the canonical nodes
+    canonical, weights = find_canonical_nodes_new(root, random_list[100], random_list[10000]) # Find the canonical nodes
     num_leaves = calculate_leaf_numbers(canonical)
+    print(f"Number of leaves: {num_leaves}")
     for i in range(1,9):# ratio from 0.1 to 0.9
         calculate_time(canonical,num_leaves,i / 10) # calculate the running time
     # Count the node amount in the interval
