@@ -57,7 +57,9 @@ def calculate_leaf_numbers(nodes):
         return count_leaf_nodes(root.left) + count_leaf_nodes(root.right)
 
     for node in nodes:
-        res += count_leaf_nodes(node)
+        count = count_leaf_nodes(node)
+        print(f"count: {count}")
+        res += count
     return res
 
 if __name__ == '__main__':
