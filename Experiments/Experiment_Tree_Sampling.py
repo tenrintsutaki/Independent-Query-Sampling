@@ -7,7 +7,7 @@ from Tree_Sampling.TreeNode import TreeNode
 
 def calculate_time(canonical,sq_size,ratio):
     start = time.time()
-    sampled_nodes = basic_sampling(canonical, sq_size * ratio) # Get 1st sampled nodes (from canonical)
+    sampled_nodes = basic_sampling(canonical, int(sq_size * ratio)) # Get 1st sampled nodes (from canonical)
     for node in sampled_nodes: # Sample them to get the leaf.
         leaf_sampling(node)
     end = time.time()
@@ -24,7 +24,8 @@ if __name__ == '__main__':
     process = psutil.Process(os.getpid())
     memory_info = process.memory_info()
     print(f"Memory Usage: {memory_info.rss / (1024 * 1024):.2f} MB")
-    canonical, weights = find_canonical_nodes_new(root, 1000, 1000000) # Find the canonical nodes
-    for i in range(1,5):# ratio from 0.1 to 0.5
-        calculate_time(canonical,10000,i / 10) # calculate the running time
+    canonical, weights = find_canonical_nodes_new(root, 1000, 100000) # Find the canonical nodes
+    num_leaves = calculate_leaf_numbers(canonical)
+    for i in range(1,9):# ratio from 0.1 to 0.9
+        calculate_time(canonical,num_leaves,i / 10) # calculate the running time
     # Count the node amount in the interval

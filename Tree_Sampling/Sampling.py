@@ -1,5 +1,5 @@
 import random
-from Sample_Tools import traverse_path
+from Tree_Sampling.Sample_Tools import traverse_path
 def find_canonical_nodes(root, x, y): # 添加Search Key
     # Find the left path and the right path......
     # 左拐和右拐的情况

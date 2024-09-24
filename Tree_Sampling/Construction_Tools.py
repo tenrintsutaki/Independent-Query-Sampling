@@ -46,6 +46,20 @@ def generate_random_weights(num):
     normalized_weights = random_weights / total_weight
     return normalized_weights
 
+def calculate_leaf_numbers(nodes):
+    """ find how many leaf nodes in these input {nodes} """
+    res = 0
+    def count_leaf_nodes(root):
+        if root is None:
+            return 0
+        if root.left is None and root.right is None:
+            return 1
+        return count_leaf_nodes(root.left) + count_leaf_nodes(root.right)
+
+    for node in nodes:
+        res += count_leaf_nodes(node)
+    return res
+
 if __name__ == '__main__':
     # Test Methods of the Construction
     # 2500000 Nodes, memory cost is 1109.19MB
