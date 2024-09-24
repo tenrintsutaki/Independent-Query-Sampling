@@ -4,6 +4,7 @@ import psutil
 import os
 import numpy as np
 from Tree_Sampling.Sample_Tools import find_min_in_right_subtree
+
 #TODO: Finish the boundary case problem.
 #TODO: Try to do the sampling method.
 
