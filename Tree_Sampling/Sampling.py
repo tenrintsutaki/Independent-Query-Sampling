@@ -58,7 +58,7 @@ def basic_sampling(canonical_nodes,times):
     return sample  # Return sampled value
 
 def leaf_sampling(node):
-    if not node.left and not node.right:
+    if node.is_leaf():
         return node
     if not node.left:
         return leaf_sampling(node.right)

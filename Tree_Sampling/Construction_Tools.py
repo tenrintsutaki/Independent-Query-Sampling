@@ -1,9 +1,9 @@
 import random
-from TreeNode import TreeNode
+from Tree_Sampling.TreeNode import TreeNode
 import psutil
 import os
 import numpy as np
-from Sample_Tools import find_min_in_right_subtree
+from Tree_Sampling.Sample_Tools import find_min_in_right_subtree
 #TODO: Finish the boundary case problem.
 #TODO: Try to do the sampling method.
 
@@ -22,18 +22,18 @@ def random_tree_assigned(n):
     ls.sort()
     return ls
 
-def construct_special_bst(sorted_array,weights,leaf_index = 0):
+def construct_bst(sorted_array, weights, leaf_index = 0):
     if not sorted_array:
         return None, leaf_index
 
     if len(sorted_array) == 1: # For leaf nodes
         weight = weights[leaf_index]
         leaf_index = leaf_index + 1
-        return TreeNode(val=sorted_array[0], weight=weight), leaf_index
+        return TreeNode(val = sorted_array[0], weight = weight), leaf_index
 
     mid = len(sorted_array) // 2
-    left_child,leaf_index  = construct_special_bst(sorted_array[:mid], weights, leaf_index)
-    right_child,leaf_index = construct_special_bst(sorted_array[mid:], weights, leaf_index)
+    left_child,leaf_index  = construct_bst(sorted_array[:mid], weights, leaf_index)
+    right_child,leaf_index = construct_bst(sorted_array[mid:], weights, leaf_index)
     root = TreeNode()
     root.val = find_min_in_right_subtree(right_child)
     root.left = left_child
@@ -47,13 +47,13 @@ def generate_random_weights(num):
     return normalized_weights
 
 if __name__ == '__main__':
+    # Test Methods of the Construction
     # 2500000 Nodes, memory cost is 1109.19MB
     num_nodes = 2500000
     random_list = random_tree_assigned(num_nodes)
-    print(random_list)
     weights = generate_random_weights(num_nodes)
-    root,leaf_index = construct_special_bst(random_list,weights,0)
+    root,leaf_index = construct_bst(random_list, weights, 0)
     process = psutil.Process(os.getpid())
     memory_info = process.memory_info()
-    print(f"当前程序的内存占用大小: {memory_info.rss / (1024 * 1024):.2f} MB")
+    print(f"Memory Usage: {memory_info.rss / (1024 * 1024):.2f} MB")
     # visualize_tree(root,[])
