@@ -8,10 +8,19 @@ from Sample_Tools import find_min_in_right_subtree
 #TODO: Try to do the sampling method.
 
 def random_tree_assigned(n):
-    """Create a tree with n nodes assigned."""
-    random_list = [random.randint(0, 2500000) for _ in range(n)]
-    random_list.sort()
-    return random_list
+    """
+        Create a tree with n nodes assigned.
+        Only includes the unique nodes.
+    """
+    # random_list = []
+    # for _ in range(n):
+    #     r = random.randint(0, 2500000)
+    #     if r not in random_list:
+    #         random_list.append(r)
+    # random_list.sort()
+    ls = random.sample(range(10 * n), n)
+    ls.sort()
+    return ls
 
 def construct_special_bst(sorted_array,weights,leaf_index = 0):
     if not sorted_array:
@@ -41,6 +50,7 @@ if __name__ == '__main__':
     # 2500000 Nodes, memory cost is 1109.19MB
     num_nodes = 2500000
     random_list = random_tree_assigned(num_nodes)
+    print(random_list)
     weights = generate_random_weights(num_nodes)
     root,leaf_index = construct_special_bst(random_list,weights,0)
     process = psutil.Process(os.getpid())
