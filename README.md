@@ -29,9 +29,10 @@ Could the first "q" is a leaf ? If so, the w(z) == w(q) ?
 ## Week 3
 
 ### Done: 
-- Finish the initial version of checking canonical nodes in efficient way
+- Finish the initial version of "Finding canonical nodes in efficient way"
 - Finish the search function of the BST (update val of each node)
 - Do the basic experiment of sampling
 
 ### Problems:
 - "Edge cases" for the checking canonical nodes
+- Verify the method of sampling experiment.
