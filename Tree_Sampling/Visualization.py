@@ -5,6 +5,8 @@ from matplotlib import pyplot as plt
 from TreeNode import TreeNode
 from Sampling import *
 from Sample_Tools import update_internal_nodes,traverse_path,calculate_weight
+from Tree_Sampling.Construction_Tools import calculate_leaf_numbers
+
 
 def plot_tree(node, canonical, x=0, y=0, layer=1, dx=1):
     if node is not None:
@@ -71,3 +73,4 @@ if __name__ == '__main__':
         times_dict[leaf_sampling(node).val] += 1
     for key,value in times_dict.items():
         print(f"{key} index sampled {value} times")
+    print(calculate_leaf_numbers(canonical))
