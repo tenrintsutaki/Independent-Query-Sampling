@@ -1,6 +1,6 @@
 ### Progress in IQS Project (Term 1)
 
-## Week1
+## Week 1
 
 ### Done:
 - Read the paper from Section 1 to Section 4.1
@@ -24,3 +24,14 @@ Could the first "q" is a leaf ? If so, the w(z) == w(q) ?
 
 2. In section 4.1
    1. In section 3.2, "Each time we could sample a children node from q", but in 4.1 seems like the node could only sample leaves, not children nodes.
+
+
+## Week 3
+
+### Done: 
+- Finish the initial version of checking canonical nodes in efficient way
+- Finish the search function of the BST (update val of each node)
+- Do the basic experiment of sampling
+
+### Problems:
+- "Edge cases" for the checking canonical nodes
