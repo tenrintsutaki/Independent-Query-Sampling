@@ -43,9 +43,8 @@ def find_canonical_nodes(root, x, y): # 添加Search Key
     return canonical_nodes,weights
 
 def basic_sampling_preprocess(canonical_nodes,weights):
-    sum_weight = sum(weights)
     for node in canonical_nodes: # Normalize the sample weight
-        node.sample_weight = node.weight / sum_weight
+        node.sample_weight = node.weight / weights
 
 def basic_sampling(canonical_nodes,times):
     # canonical_nodes:[node 1,node 2,node 3,...,node n]
@@ -101,7 +100,7 @@ def find_path(root, target):
 
 def collect_nodes(root, path_x, path_y):
     collected_nodes = []
-
+    sum_weight = 0.0
     # 找到分叉节点
     split_node = root
     for x, y in zip(path_x, path_y):
@@ -117,16 +116,21 @@ def collect_nodes(root, path_x, path_y):
     for i in range(index_split_x + 2,len(path_x)):
         if (pre.left == path_x[i]):
             collected_nodes.append(pre.right)
+            sum_weight += pre.right.weight
         pre = path_x[i]
 
     pre = path_y[index_split_y + 1]
     for i in range(index_split_y + 2,len(path_y)):
         if (pre.right == path_y[i]):
             collected_nodes.append(pre.left)
+            sum_weight += pre.left.weight
         pre = path_y[i]
+    # Process the leaf node
     collected_nodes.append(path_x[-1])
     collected_nodes.append(path_y[-1])
-    return collected_nodes
+    sum_weight += path_x[-1].weight
+    sum_weight += path_y[-1].weight
+    return collected_nodes,sum_weight
 
 
 def find_paths_and_collect(root, x, y):
@@ -143,6 +147,6 @@ def find_paths_and_collect(root, x, y):
         return []  # 如果没有找到任何路径，返回空列表
 
     # 收集节点
-    collected_nodes = collect_nodes(root, path_x, path_y)
+    collected_nodes,sum_weights = collect_nodes(root, path_x, path_y)
     # print(f"collected: ",collected_nodes)
-    return collected_nodes,[]
+    return collected_nodes,sum_weights

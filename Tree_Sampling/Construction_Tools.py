@@ -19,7 +19,7 @@ def random_tree_assigned(n):
     #     if r not in random_list:
     #         random_list.append(r)
     # random_list.sort()
-    ls = random.sample(range(10 * n), n)
+    ls = random.sample(range(100 * n), n)
     ls.sort()
     return ls
 

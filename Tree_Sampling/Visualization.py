@@ -65,7 +65,7 @@ if __name__ == '__main__':
     #     print(node.val, node.weight)
     # 可视化二叉树
 
-    canonical,weights = find_paths_and_collect(root,1,9)
+    canonical,weights = find_paths_and_collect(root,4,9)
     print(canonical)
     visualize_tree(root,canonical)
     basic_sampling_preprocess(canonical,weights)
