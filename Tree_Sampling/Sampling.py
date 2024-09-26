@@ -82,3 +82,60 @@ def find_canonical_nodes_new(root,x,y):
             nodes_left.remove(node)
 
     return nodes_left, weights_left
+
+
+def find_path(root, target):
+    path = []
+    current = root
+
+    while current:
+        path.append(current)
+
+        if target < current.val:
+            current = current.left
+        elif target > current.val:
+            current = current.right
+        else:
+            break  # 找到目标节点
+
+    return path if current and current.val == target else None  # 确保目标节点存在
+
+
+def collect_nodes(root, path_x, path_y):
+    collected_nodes = []
+
+    # 找到分叉节点
+    split_node = root
+    for x, y in zip(path_x, path_y):
+        if x == y:
+            split_node = x
+        else:
+            break
+
+    # 从分叉节点开始收集节点
+    for node in path_x:
+        if node == split_node:
+            break
+        if node.right:  # 如果向左子树走，收集右子节点
+            collected_nodes.append(node.right)
+
+    for node in path_y:
+        if node == split_node:
+            break
+        if node.left:  # 如果向右子树走，收集左子节点
+            collected_nodes.append(node.left)
+
+    return collected_nodes
+
+
+def find_paths_and_collect(root, x, y):
+    path_x = find_path(root, x)
+    path_y = find_path(root, y)
+
+    if path_x is None or path_y is None:
+        return []  # 如果没有找到任何路径，返回空列表
+
+    # 收集节点
+    collected_nodes = collect_nodes(root, path_x, path_y)
+
+    return collected_nodes,[]
