@@ -93,12 +93,10 @@ def find_path(root, target):
 
         if target < current.val:
             current = current.left
-        elif target > current.val:
+        elif target >= current.val:
             current = current.right
-        else:
-            break  # 找到目标节点
 
-    return path if current and current.val == target else None  # 确保目标节点存在
+    return path  # 确保目标节点存在
 
 
 def collect_nodes(root, path_x, path_y):
@@ -111,20 +109,23 @@ def collect_nodes(root, path_x, path_y):
             split_node = x
         else:
             break
+    # get the split node.
+    index_split_x = path_x.index(split_node)
+    index_split_y = path_y.index(split_node)
 
-    # 从分叉节点开始收集节点
-    for node in path_x:
-        if node == split_node:
-            break
-        if node.right:  # 如果向左子树走，收集右子节点
-            collected_nodes.append(node.right)
+    pre = path_x[index_split_x + 1]
+    for i in range(index_split_x + 2,len(path_x)):
+        if (pre.left == path_x[i]):
+            collected_nodes.append(pre.right)
+        pre = path_x[i]
 
-    for node in path_y:
-        if node == split_node:
-            break
-        if node.left:  # 如果向右子树走，收集左子节点
-            collected_nodes.append(node.left)
-
+    pre = path_y[index_split_y + 1]
+    for i in range(index_split_y + 2,len(path_y)):
+        if (pre.right == path_y[i]):
+            collected_nodes.append(pre.left)
+        pre = path_y[i]
+    collected_nodes.append(path_x[-1])
+    collected_nodes.append(path_y[-1])
     return collected_nodes
 
 
@@ -132,10 +133,16 @@ def find_paths_and_collect(root, x, y):
     path_x = find_path(root, x)
     path_y = find_path(root, y)
 
+    # for node in path_x:
+    #     print(f"Node in path x: {node.val}")
+    #
+    # for node in path_y:
+    #     print(f"Node in path y: {node.val}")
+
     if path_x is None or path_y is None:
         return []  # 如果没有找到任何路径，返回空列表
 
     # 收集节点
     collected_nodes = collect_nodes(root, path_x, path_y)
-
+    # print(f"collected: ",collected_nodes)
     return collected_nodes,[]
