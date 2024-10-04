@@ -1,9 +1,11 @@
 import random
+
+from Alias.Alias_Structure import AliasStructure
 from Tree_Sampling.TreeNode import TreeNode
 import psutil
 import os
 import numpy as np
-from Tree_Sampling.Sample_Tools import find_min_in_right_subtree
+from Tree_Sampling.Sample_Tools import find_min_in_right_subtree,find_leaves
 
 #TODO: Finish the boundary case problem.
 #TODO: Try to do the sampling method.
@@ -41,6 +43,28 @@ def construct_bst(sorted_array, weights, leaf_index = 0):
     root.right = right_child
     return root,leaf_index
 
+def build_AS_structure(root):
+    """
+    Build the AS structure for the BST
+    :param root:
+    :return:
+    """
+    if not root:
+        return
+    if root.is_leaf():
+        return
+    leaves = find_leaves(root) # find leaves belonging to this node
+    root.leaves = leaves
+    probs = []
+    for leaf in leaves:
+        probs.append(leaf.weight) # Not sure for sample weight or weight
+    s = sum(probs)
+    for i in range(0,len(probs)): # Can be low efficient, need to be modified
+        probs[i] /= s
+    alias_structure = AliasStructure(probs)
+    alias_structure.initialize()
+    root.AS = alias_structure
+
 def generate_random_weights(num):
     random_weights = np.random.rand(num)
     total_weight = np.sum(random_weights)
@@ -62,6 +86,7 @@ def calculate_leaf_numbers(nodes):
         print(f"count: {count}")
         res += count
     return res
+
 
 if __name__ == '__main__':
     # Test Methods of the Construction

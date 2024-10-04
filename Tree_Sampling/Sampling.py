@@ -150,3 +150,74 @@ def find_paths_and_collect(root, x, y):
     collected_nodes,sum_weights = collect_nodes(root, path_x, path_y)
     # print(f"collected: ",collected_nodes)
     return collected_nodes,sum_weights
+
+def find_min_leaf(root):
+    """ 找到以 root 为根的树的最小叶子节点的值 """
+    if root is None:
+        return float('inf')  # 如果没有节点，返回正无穷
+
+    # 如果是叶子节点，返回它的值
+    if root.left is None and root.right is None:
+        return root.val
+
+    # 向左子树递归查找最小叶子节点的值
+    return min(find_min_leaf(root.left), find_min_leaf(root.right))
+
+
+def find_max_leaf(root):
+    """ 找到以 root 为根的树的最大叶子节点的值 """
+    if root is None:
+        return float('-inf')  # 如果没有节点，返回负无穷
+
+    # 如果是叶子节点，返回它的值
+    if root.left is None and root.right is None:
+        return root.val
+
+    # 向左子树和右子树递归查找最大叶子节点的值
+    return max(find_max_leaf(root.left), find_max_leaf(root.right))
+
+
+def update_intervals(root):
+    """ 更新每个内部节点的 interval 属性 """
+    if root is None:
+        return
+
+    # 递归更新左子树和右子树
+    update_intervals(root.left)
+    update_intervals(root.right)
+
+    # 只更新内部节点的 interval
+    if root.left is not None or root.right is not None:
+        min_left = find_min_leaf(root.left)
+        max_right = find_max_leaf(root.right)
+        root.interval = [min_left, max_right]
+
+def comparable_sampling(node,x,y):
+    """
+    Compare the canonical tree sampling
+    :param node: root of the tree
+    :param x: left interval
+    :param y: right interval
+    :return:
+    """
+    res = []
+    def dfs(node):
+        if node is None:
+            return
+
+        if node.is_leaf():
+            if x <= node.val <= y:
+                res.append(node)
+            return
+
+        if check_insect(node, x, y):
+            dfs(node.left)
+            dfs(node.right)
+    dfs(node)
+    return res
+
+def check_insect(node,x,y):
+    if y < node.interval[0] or x > node.interval[1]:
+        return False
+    else:
+        return True

@@ -76,3 +76,17 @@ def traverse_path(root,target,direction):
     find_leaf_with_value(root, target, None)
     return res,weights,removed
 
+def find_leaves(node):
+    """ find how many leaf nodes in these current input {node} """
+    res = []
+    def find_leaves_nodes(root):
+        if root is None:
+            return
+        if root.is_leaf():
+            res.append(root)
+            return
+        find_leaves_nodes(root.left)
+        find_leaves_nodes(root.right)
+
+    find_leaves_nodes(node)
+    return res

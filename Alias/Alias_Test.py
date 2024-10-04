@@ -16,5 +16,11 @@ def test_alias_structure(probs,times):
 if __name__ == '__main__':
     # dice_list = [3 / 10, 2 / 10, 2 / 10, 2 / 10, 1 / 10]
     # test_alias_structure(dice_list, 1000000)
-    dice_list = [3/10,7/10]
+    dice_list = [10,40]
+    s = sum(dice_list)
+    for i in range(len(dice_list)):
+        dice_list[i] = dice_list[i] / s
+
     test_alias_structure(dice_list, 1000000)
+    # For tree sampling, we could use the alias_structure in each node and store its leaf nodes
+

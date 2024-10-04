@@ -4,7 +4,7 @@ from collections import defaultdict
 from matplotlib import pyplot as plt
 from TreeNode import TreeNode
 from Sampling import *
-from Sample_Tools import update_internal_nodes,traverse_path,calculate_weight
+from Sample_Tools import update_internal_nodes,traverse_path,calculate_weight,find_leaves
 from Tree_Sampling.Construction_Tools import calculate_leaf_numbers
 
 
@@ -55,8 +55,8 @@ if __name__ == '__main__':
     root.right.right = TreeNode()
     root.right.left.left = TreeNode(val = 9, weight = 0.1)
     root.right.left.right = TreeNode(val = 11, weight = 0.1)
-    root.right.right.left = TreeNode(val=12, weight=0.1)
-    root.right.right.right = TreeNode(val = 13, weight = 0.2)
+    root.right.right.left = TreeNode(val=12, weight=0.15)
+    root.right.right.right = TreeNode(val = 13, weight = 0.15)
     calculate_weight(root)
     update_internal_nodes(root)
 
@@ -65,13 +65,22 @@ if __name__ == '__main__':
     #     print(node.val, node.weight)
     # 可视化二叉树
 
-    canonical,weights = find_paths_and_collect(root,4,9)
+    canonical,weights = find_paths_and_collect(root,1,9)
     print(canonical)
     visualize_tree(root,canonical)
     basic_sampling_preprocess(canonical,weights)
-    sampled_nodes = basic_sampling(canonical,10000)
+    update_intervals(root)
+    sampled_nodes = basic_sampling(canonical,1000)
     for node in sampled_nodes:
         times_dict[leaf_sampling(node).val] += 1
     for key,value in times_dict.items():
         print(f"{key} index sampled {value} times")
     print(calculate_leaf_numbers(canonical))
+    print(root.interval)
+
+    compare_list = comparable_sampling(root,4,9)
+    for node in compare_list:
+        print("Compare path:",node.val)
+    res = find_leaves(root)
+    for node in res:
+        print("Leaves:",node.val)
