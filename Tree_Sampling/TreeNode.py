@@ -4,7 +4,7 @@ class TreeNode():
         self.left = left
         self.right = right
         self.weight = weight
-        self.sample_weight = 0
+        self.sample_weight = 0 # Memory
         self.val = val
         self.AS = None
         self.interval = None

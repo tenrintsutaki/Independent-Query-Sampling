@@ -33,10 +33,43 @@ class AliasStructure():
         self.probs = probs
         self.UrnList = []
         self.avg = 1/len(self.probs)
-        self.e1Set = []
-        self.e2Set = []
-        self.avgSet = []
+        self.e1Set = set()
+        self.e2Set = set()
+        self.avgSet = set()
     def initialize(self):
+        for i in range(len(self.probs)): # Scan the index and put them into different sets
+            element = self.probs[i]
+            if(element < self.avg):
+                self.e1Set.add(i)
+            elif element == self.avg:
+                self.avgSet.add(i)
+            else:
+                self.e2Set.add(i)
+
+        while len(self.e1Set) > 0: # sample the index from the sets when there are values in e1 set
+
+            i1 = self.e1Set.pop()
+            e1 = self.probs[i1]
+
+            i2 = self.e2Set.pop()
+            e2 = self.probs[i2]
+
+            self.UrnList.append(Urn(count = 2,e1 = e1,i1 = i1,e2 = self.avg - e1,i2 = i2)) # Create Urn
+            rest = round(e2 - (self.avg - e1),2)
+            if (rest == self.avg): # e2 become avg
+                self.avgSet.add(i2)
+            elif (rest > 0 and rest < self.avg): # e2 become e1
+                self.e1Set.add(i2)
+            self.probs[i2] = rest
+
+        for i in self.avgSet: # Traverse the avg set eventually
+            self.UrnList.append(Urn(count = 1,e1 = self.probs[i], i1 = i))
+
+    def initialize_old(self):
+        """
+        Another way to implement the AS......
+        :return:
+        """
         for i in range(len(self.probs)): # Scan the index and put them into different sets
             element = self.probs[i]
             if(element < self.avg):

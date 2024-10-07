@@ -48,6 +48,7 @@ if __name__ == '__main__':
     calculate_weight(root)
     update_internal_nodes(root)
     update_intervals(root)
+    build_AS_structure(root)
 
     process = psutil.Process(os.getpid())
     memory_info = process.memory_info()
