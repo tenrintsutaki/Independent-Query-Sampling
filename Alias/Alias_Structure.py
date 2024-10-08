@@ -36,6 +36,9 @@ class AliasStructure():
         self.e1Set = set()
         self.e2Set = set()
         self.avgSet = set()
+        # self.e1Set = []
+        # self.e2Set = []
+        # self.avgSet = []
     def initialize(self):
         for i in range(len(self.probs)): # Scan the index and put them into different sets
             element = self.probs[i]
@@ -49,19 +52,26 @@ class AliasStructure():
         while len(self.e1Set) > 0: # sample the index from the sets when there are values in e1 set
 
             i1 = self.e1Set.pop()
+            self.e1Set.add(i1)
             e1 = self.probs[i1]
 
             i2 = self.e2Set.pop()
+            self.e2Set.add(i2)
             e2 = self.probs[i2]
 
             self.UrnList.append(Urn(count = 2,e1 = e1,i1 = i1,e2 = self.avg - e1,i2 = i2)) # Create Urn
+            self.e1Set.remove(i1)
+
             rest = round(e2 - (self.avg - e1),2)
-            if (rest == self.avg): # e2 become avg
+            if(rest == 0): # e2 = 0 after operation
+                self.e2Set.remove(i2)
+            elif (rest == self.avg): # e2 become avg
                 self.avgSet.add(i2)
             elif (rest > 0 and rest < self.avg): # e2 become e1
+                self.e2Set.remove(i2)
                 self.e1Set.add(i2)
             self.probs[i2] = rest
-
+            self.probs[i2] = rest
         for i in self.avgSet: # Traverse the avg set eventually
             self.UrnList.append(Urn(count = 1,e1 = self.probs[i], i1 = i))
 
