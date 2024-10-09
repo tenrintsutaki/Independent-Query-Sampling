@@ -51,10 +51,11 @@ def build_AS_structure(root):
     """
     if not root:
         return
+
     if root.is_leaf():
         return
+
     leaves = find_leaves(root) # find leaves belonging to this node
-    root.leaves = leaves
     probs = []
     for leaf in leaves:
         probs.append(leaf.weight) # Not sure for sample weight or weight
@@ -62,8 +63,11 @@ def build_AS_structure(root):
     for i in range(0,len(probs)): # Can be low efficient, need to be modified
         probs[i] /= s
     alias_structure = AliasStructure(probs)
-    alias_structure.initialize()
     root.AS = alias_structure
+    root.AS.initialize()
+
+    build_AS_structure(root.left)
+    build_AS_structure(root.right)
 
 def generate_random_weights(num):
     random_weights = np.random.rand(num)
@@ -91,7 +95,7 @@ def calculate_leaf_numbers(nodes):
 if __name__ == '__main__':
     # Test Methods of the Construction
     # 2500000 Nodes, memory cost is 1109.19MB
-    num_nodes = 2500000
+    num_nodes = 25000
     random_list = random_tree_assigned(num_nodes)
     weights = generate_random_weights(num_nodes)
     root,leaf_index = construct_bst(random_list, weights, 0)

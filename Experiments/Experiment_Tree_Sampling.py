@@ -25,7 +25,7 @@ def calculate_time_tree_alias(root, selectivity, total_length,k):
     for node in result:
         leaf_sampling_alias(node,k) # Then use alias sampling to get the result
     end = time.time()
-    print(f"Time taken to sample {end - start} when selectivity is {selectivity}")
+    print(f"Time taken to sample {end - start} when selectivity is {selectivity} [Alias]")
     return end - start
 
 def calculate_time_compare(root, selectivity, total_length,k):
@@ -40,7 +40,7 @@ def calculate_time_compare(root, selectivity, total_length,k):
 if __name__ == '__main__':
     # Test Methods of the Construction
     # 2500000 Nodes, memory cost is 1109.19MB
-    num_nodes = 2500000
+    num_nodes = 250000
     random_list = random_tree_assigned(num_nodes)
     weights = generate_random_weights(num_nodes)
 

@@ -49,7 +49,7 @@ class AliasStructure():
             else:
                 self.e2Set.add(i)
 
-        while len(self.e1Set) > 0: # sample the index from the sets when there are values in e1 set
+        while len(self.e1Set) > 0 and len(self.e2Set) > 0: # sample the index from the sets when there are values in e1 set
 
             i1 = self.e1Set.pop()
             self.e1Set.add(i1)
@@ -62,18 +62,24 @@ class AliasStructure():
             self.UrnList.append(Urn(count = 2,e1 = e1,i1 = i1,e2 = self.avg - e1,i2 = i2)) # Create Urn
             self.e1Set.remove(i1)
 
-            rest = round(e2 - (self.avg - e1),2)
+            rest = e2 - (self.avg - e1)
+            rest_round = round(e2 - (self.avg - e1), 2)
             if(rest == 0): # e2 = 0 after operation
                 self.e2Set.remove(i2)
-            elif (rest == self.avg): # e2 become avg
+            elif (rest_round == self.avg): # e2 become avg
                 self.avgSet.add(i2)
             elif (rest > 0 and rest < self.avg): # e2 become e1
                 self.e2Set.remove(i2)
                 self.e1Set.add(i2)
             self.probs[i2] = rest
-            self.probs[i2] = rest
+
         for i in self.avgSet: # Traverse the avg set eventually
             self.UrnList.append(Urn(count = 1,e1 = self.probs[i], i1 = i))
+
+        # Due to the computational error, we need to put the last value into a single URN
+        if len(self.e1Set) != 0:
+            last_index = self.e1Set.pop()
+            self.UrnList.append(Urn(count = 1,e1 = self.avg, i1 = last_index))
 
     def initialize_old(self):
         """
@@ -89,7 +95,7 @@ class AliasStructure():
             else:
                 self.e2Set.append(i)
 
-        while len(self.e1Set) > 0: # sample the index from the sets
+        while len(self.e1Set) > 0 and len(self.e2Set) > 0: # sample the index from the sets
 
             i1 = random.choice(self.e1Set)
             e1 = self.probs[i1]
@@ -99,10 +105,11 @@ class AliasStructure():
 
             self.UrnList.append(Urn(count = 2,e1 = e1,i1 = i1,e2 = self.avg - e1,i2 = i2)) # Create Urn
             self.e1Set.remove(i1)
-            rest = round(e2 - (self.avg - e1),2)
+            rest = e2 - (self.avg - e1)
+            rest_round = round(e2 - (self.avg - e1),2)
             if(rest == 0): # e2 = 0 after operation
                 self.e2Set.remove(i2)
-            elif (rest == self.avg): # e2 become avg
+            elif (rest_round == self.avg): # e2 become avg
                 self.avgSet.append(i2)
             elif (rest > 0 and rest < self.avg): # e2 become e1
                 self.e2Set.remove(i2)
@@ -112,6 +119,10 @@ class AliasStructure():
         for i in self.avgSet: # Traverse the avg set eventually
             self.UrnList.append(Urn(count = 1,e1 = self.probs[i], i1 = i))
 
+        # Due to the computational error, we need to put the last value into a single URN
+        if len(self.e1Set) != 0:
+            last_index = self.e1Set[0]
+            self.UrnList.append(Urn(count = 1,e1 = self.avg, i1 = last_index))
     def sample(self):
         urn = random.choice(self.UrnList)
         return urn.sample()
