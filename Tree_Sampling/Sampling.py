@@ -56,6 +56,8 @@ def basic_sampling(canonical_nodes,times):
     sample = random.choices(canonical_nodes, weights=prob_list, k=times)  # 根据权重进行随机采样
     return sample  # Return sampled value
 
+
+
 def leaf_sampling(node):
     if node.is_leaf():
         return node

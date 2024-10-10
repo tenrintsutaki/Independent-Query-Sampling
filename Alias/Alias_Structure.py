@@ -63,10 +63,11 @@ class AliasStructure():
             self.e1Set.remove(i1)
 
             rest = e2 - (self.avg - e1)
-            rest_round = round(e2 - (self.avg - e1), 2)
+            # rest_round = round(e2 - (self.avg - e1), 2)
+            # print(rest <= rest_round + 0.01 * rest and rest >= rest_round - 0.01 * rest)
             if(rest == 0): # e2 = 0 after operation
                 self.e2Set.remove(i2)
-            elif (rest_round == self.avg): # e2 become avg
+            elif (rest <= self.avg + 0.01 * rest and rest >= self.avg - 0.01 * rest): # e2 become avg
                 self.avgSet.add(i2)
             elif (rest > 0 and rest < self.avg): # e2 become e1
                 self.e2Set.remove(i2)
