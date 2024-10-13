@@ -33,7 +33,7 @@ def test_alias_structure_old(probs,times):
 
 
 if __name__ == '__main__':
-    dice_list = [10,20,30,40]
+    dice_list = [10,10,10,10,20,20,20]
     s = sum(dice_list)
     for i in range(len(dice_list)):
         dice_list[i] = dice_list[i] / s
