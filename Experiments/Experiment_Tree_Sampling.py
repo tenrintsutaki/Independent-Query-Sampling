@@ -52,27 +52,34 @@ def calculate_time_compare(root, selectivity, total_length,k):
 
 if __name__ == '__main__':
     # Test Methods of the Construction
-    num_nodes = 1200000
+
+    num_nodes = 1400000
     random_list = random_tree_assigned(num_nodes)
     weights = generate_random_weights(num_nodes)
+
+
+    process = psutil.Process(os.getpid())
+    memory_info = process.memory_info()
+    memory_cost_before_tree = memory_info.rss
 
     root,leaf_index = construct_bst(random_list, weights, 0)
     calculate_weight(root)
     update_internal_nodes(root)
-    update_intervals(root)
+    # update_intervals(root)
     build_AS_structure(root)
 
     process = psutil.Process(os.getpid())
     memory_info = process.memory_info()
+    memory_cost_after_tree = memory_info.rss
+    print(f"Memory Usage: {(memory_cost_after_tree - memory_cost_before_tree) / (1024 * 1024):.2f} MB")
 
     time_vals_canonical = []
     time_vals_compare = []
     time_vals_alias = []
     time_vals_alias_alias = []
     selectivity_vals = []
-    k = 200
+    k = 300
     round = 10
-    print(f"Memory Usage: {memory_info.rss / (1024 * 1024):.2f} MB")
     for i in range(1,10):# ratio from 1% to 9%
         r_canonical = 0
         r_compare = 0
@@ -80,15 +87,15 @@ if __name__ == '__main__':
         r_alias_alias = 0
         for r in range(round):
             r_canonical += calculate_time_tree_sampling(root, i / 10, num_nodes,k) # calculate the running time
-            r_compare += calculate_time_compare(root, i / 10, num_nodes,k)
+            # r_compare += calculate_time_compare(root, i / 10, num_nodes,k)
             r_alias += calculate_time_tree_alias(root, i / 10, num_nodes, k)
             r_alias_alias += calculate_time_tree_alias_alias(root, i / 10, num_nodes, k)
-        print(f"Time taken to sample {r_compare / round} when selectivity is {i / 10} [compare]")
+        # print(f"Time taken to sample {r_compare / round} when selectivity is {i / 10} [compare]")
         print(f"Time taken to sample {r_canonical / round} when selectivity is {i / 10} [canonical]")
         print(f"Time taken to sample {r_alias / round} when selectivity is {i / 10} [alias]")
         print(f"Time taken to sample {r_alias_alias / round} when selectivity is {i / 10} [alias-alias]")
         time_vals_canonical.append(r_canonical / round)
-        time_vals_compare.append(r_compare / round)
+        # time_vals_compare.append(r_compare / round)
         time_vals_alias.append(r_alias / round)
         time_vals_alias_alias.append(r_alias_alias / round)
         selectivity_vals.append(i / 10)
@@ -98,15 +105,15 @@ if __name__ == '__main__':
     import matplotlib.pyplot as plt
 
     # Generate some sample data
-    fig1, ax1 = plt.subplots()
-    ax1.plot(selectivity_vals, time_vals_compare, label='Compare')
-    ax1.plot(selectivity_vals, time_vals_alias, label='Alias')
-    ax1.set_ylabel('Time')
-    ax1.plot(selectivity_vals, time_vals_canonical, label='Canonical')
-    ax1.set_xlabel('Selectivity')
-    ax1.legend()
-    plt.title(f'Nodes: {num_nodes}, Memory Cost: {memory_info.rss / (1024 * 1024 * 1024):.2f} GB, S = {k}')
-    plt.show()
+    # fig1, ax1 = plt.subplots()
+    # ax1.plot(selectivity_vals, time_vals_compare, label='Compare')
+    # ax1.plot(selectivity_vals, time_vals_alias, label='Alias')
+    # ax1.set_ylabel('Time')
+    # ax1.plot(selectivity_vals, time_vals_canonical, label='Canonical')
+    # ax1.set_xlabel('Selectivity')
+    # ax1.legend()
+    # plt.title(f'Nodes: {num_nodes}, Memory Cost: {memory_info.rss / (1024 * 1024 * 1024):.2f} GB, S = {k}')
+    # plt.show()
 
     fig2, ax2 = plt.subplots()
     ax2.plot(selectivity_vals, time_vals_alias, label='Alias')

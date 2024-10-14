@@ -4,10 +4,10 @@ class TreeNode():
         self.left = left
         self.right = right
         self.weight = weight
-        self.sample_weight = 0 # Memory
+        # self.sample_weight = 0 # Memory
         self.val = val
-        self.AS = None
-        self.interval = None
+        # self.AS = None
+        # self.interval = None
 
     def is_leaf(self):
         return self.left is None and self.right is None
