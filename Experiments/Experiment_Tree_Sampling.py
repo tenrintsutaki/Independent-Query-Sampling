@@ -5,7 +5,7 @@ from Tree_Sampling.Sampling import find_canonical_nodes_new, basic_sampling, lea
     comparable_sampling, \
     find_paths_and_collect, basic_sampling_preprocess, update_intervals
 from Tree_Sampling.TreeNode import TreeNode
-from Tree_Sampling.Sampling_Alias import leaf_sampling_alias, alias_sampling
+from Tree_Sampling.Sampling_Alias import leaf_sampling_alias, alias_sampling, alias_sampling_direct
 
 
 def calculate_time_tree_sampling(root, selectivity, total_length,k):
@@ -66,6 +66,7 @@ if __name__ == '__main__':
     calculate_weight(root)
     update_internal_nodes(root)
     # update_intervals(root)
+    # build_AS_structure_direct_node(root)
     build_AS_structure(root)
 
     process = psutil.Process(os.getpid())

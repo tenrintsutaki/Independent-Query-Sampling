@@ -1,6 +1,6 @@
 import random
 
-from Alias.Alias_Structure import AliasStructure
+from Alias.Alias_Structure import AliasStructure,AliasStructure_Direct_Nodes
 from Tree_Sampling.TreeNode import TreeNode
 import psutil
 import os
@@ -63,6 +63,32 @@ def build_AS_structure(root):
     for i in range(0,len(probs)): # Can be low efficient, need to be modified
         probs[i] /= s
     alias_structure = AliasStructure(probs)
+    root.AS = alias_structure
+    root.AS.initialize()
+
+    build_AS_structure(root.left)
+    build_AS_structure(root.right)
+
+def build_AS_structure_direct_node(root):
+    """
+    Build the AS structure for the BST
+    :param root:
+    :return:
+    """
+    if not root:
+        return
+
+    if root.is_leaf():
+        return
+
+    leaves = find_leaves(root) # find leaves belonging to this node
+    probs = []
+    for leaf in leaves:
+        probs.append(leaf.weight) # Not sure for sample weight or weight
+    s = sum(probs)
+    for i in range(0,len(probs)): # Can be low efficient, need to be modified
+        probs[i] /= s
+    alias_structure = AliasStructure_Direct_Nodes(probs,leaves)
     root.AS = alias_structure
     root.AS.initialize()
 
