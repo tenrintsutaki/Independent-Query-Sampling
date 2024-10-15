@@ -33,11 +33,11 @@ def test_alias_structure_old(probs,times):
 
 
 if __name__ == '__main__':
-    dice_list = [10,10,10,10,20,20,20]
+    dice_list = [10,20,30,40]
     s = sum(dice_list)
     for i in range(len(dice_list)):
         dice_list[i] = dice_list[i] / s
-    test_alias_structure(dice_list, 1000000)
+    test_alias_structure(dice_list, 100000)
 
     # dice_list = [random.randint(0, 2000) for _ in range(2000000)]
 
