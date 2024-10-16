@@ -1,5 +1,5 @@
 import random
-
+# Vector + Hash removed, Optimization
 
 class Urn():
     def __init__(self,count,e1,i1,e2 = None,i2 = None):
