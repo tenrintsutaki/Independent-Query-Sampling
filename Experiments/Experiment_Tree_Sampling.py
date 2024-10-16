@@ -53,7 +53,7 @@ def calculate_time_compare(root, selectivity, total_length,k):
 if __name__ == '__main__':
     # Test Methods of the Construction
 
-    num_nodes = 1400000
+    num_nodes = 1000000
     random_list = random_tree_assigned(num_nodes)
     weights = generate_random_weights(num_nodes)
 
@@ -80,7 +80,7 @@ if __name__ == '__main__':
     time_vals_alias_alias = []
     selectivity_vals = []
     k = 300
-    round = 10
+    round = 100
     for i in range(1,10):# ratio from 1% to 9%
         r_canonical = 0
         r_compare = 0
