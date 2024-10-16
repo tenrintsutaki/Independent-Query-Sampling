@@ -79,7 +79,7 @@ if __name__ == '__main__':
     time_vals_alias = []
     time_vals_alias_alias = []
     selectivity_vals = []
-    k = 200
+    k = 300
     round = 100
     for i in range(1,10):# ratio from 1% to 9%
         r_canonical = 0
