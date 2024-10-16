@@ -1,4 +1,5 @@
 import random
+import math
 # Vector + Hash removed, Optimization
 
 class Urn():
@@ -18,7 +19,7 @@ class Urn():
             # When sample from the urn only contains 1 element, return the index1
             return self.i1
         else:
-            repeat_index = random.random()
+            repeat_index = repeat_index
             # Sample a value from e1 and e2, assume e1 < e2
             if(repeat_index >= self.e1):
                 return self.i2
@@ -78,10 +79,10 @@ class AliasStructure():
 
     def sample(self):
         # Choose an urn first
-        index = random.randint(0,len(self.UrnSet)-1) # Create a repeatable index
-        urn = self.UrnSet[index]
-        repeat_index = index / (len(self.UrnSet) - 1) # Repeatable number from [0,1]
-        return urn.sample(repeat_index)
+        index = random.random() * len(self.UrnSet) # Create a repeatable index
+        floor = math.floor(index)
+        urn = self.UrnSet[floor] # Choose the urn
+        return urn.sample(index - floor)
 
 class AliasStructure_List():
     # Alias Structure Class
