@@ -1,4 +1,7 @@
 import time
+
+from matplotlib import pyplot as plt
+
 from Tree_Sampling.Construction_Tools import *
 from Tree_Sampling.Sample_Tools import calculate_weight, update_internal_nodes,calculate_height
 from Tree_Sampling.Sampling import find_canonical_nodes_new, basic_sampling, leaf_sampling, find_canonical_nodes, \
@@ -71,18 +74,28 @@ if __name__ == '__main__':
     root,leaf_index = construct_bst(random_list, weights, 0)
     calculate_weight(root)
     update_internal_nodes(root)
-    # update_intervals(root)
-    # build_AS_structure_direct_node(root)
     build_AS_structure(root)
+
+    vals_canonical = []
+    axis = []
 
     process = psutil.Process(os.getpid())
     memory_info = process.memory_info()
     memory_cost_after_tree = memory_info.rss
     print(f"Memory Usage: {(memory_cost_after_tree - memory_cost_before_tree) / (1024 * 1024):.2f} MB")
-    k  = 300
+    k = 300
     round = 1
     root_height = calculate_height(root)
-    for i in range(1, 100):  # ratio from 1% to 9%
+    for i in range(1, 800):  # ratio from 1% to 9%
         for r in range(round):
+            vals_canonical.append(i / 1000)
             canonicals = calculate_time_tree_sampling(root, i / 1000, num_nodes, k)  # calculate the running time
-            print(f"height:  {max(print_heights(canonicals))}/{root_height}, selectivity = {i / 1000}")
+            axis.append(max(print_heights(canonicals)))
+            # print(f"height:  {max(print_heights(canonicals))}/{root_height}, selectivity = {i / 1000}")
+
+    fig2, ax2 = plt.subplots()
+    ax2.plot(vals_canonical,axis,label='Selectivity')
+    ax2.set_ylabel('Max_Height')
+    ax2.legend()
+    plt.title(f'Nodes: {num_nodes}, Memory Cost: {memory_info.rss / (1024 * 1024 * 1024):.2f} GB, S = {k}')
+    plt.show()
