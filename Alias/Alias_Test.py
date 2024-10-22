@@ -1,7 +1,6 @@
 import time
 from collections import defaultdict
 import random
-
 from Alias_Structure import AliasStructure
 
 def test_alias_structure(probs,times):
@@ -30,8 +29,6 @@ def test_alias_structure_old(probs,times):
         times_dict[result] += 1
     ls = sorted(times_dict.items(), key=lambda x: x[0])
 
-
-
 if __name__ == '__main__':
     dice_list = [10,20,30,40]
     s = sum(dice_list)
@@ -39,11 +36,4 @@ if __name__ == '__main__':
         dice_list[i] = dice_list[i] / s
     test_alias_structure(dice_list, 100000)
 
-    # dice_list = [random.randint(0, 2000) for _ in range(2000000)]
-
-
-
-    # test_alias_structure(dice_list, 1000)
-    # test_alias_structure_old(dice_list, 1000)
-    # For tree sampling, we could use the alias_structure in each node and store its leaf nodes
 

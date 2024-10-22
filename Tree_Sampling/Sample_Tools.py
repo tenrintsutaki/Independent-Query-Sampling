@@ -90,3 +90,11 @@ def find_leaves(node):
 
     find_leaves_nodes(node)
     return res
+
+def calculate_height(node):
+    """calculate the height of a tree-node"""
+    if not node:
+        return 0
+    left = calculate_height(node.left)
+    right = calculate_height(node.right)
+    return max(left, right) + 1
