@@ -66,7 +66,6 @@ if __name__ == '__main__':
     random_list = random_tree_assigned(num_nodes)
     weights = generate_random_weights(num_nodes)
 
-
     process = psutil.Process(os.getpid())
     memory_info = process.memory_info()
     memory_cost_before_tree = memory_info.rss
@@ -94,7 +93,8 @@ if __name__ == '__main__':
             # print(f"height:  {max(print_heights(canonicals))}/{root_height}, selectivity = {i / 1000}")
 
     fig2, ax2 = plt.subplots()
-    ax2.plot(vals_canonical,axis,label='Selectivity')
+    ax2.plot(vals_canonical,axis)
+    ax2.set_xlabel('Selectivity')
     ax2.set_ylabel('Max_Height')
     ax2.legend()
     plt.title(f'Nodes: {num_nodes}, Memory Cost: {memory_info.rss / (1024 * 1024 * 1024):.2f} GB, S = {k}')
