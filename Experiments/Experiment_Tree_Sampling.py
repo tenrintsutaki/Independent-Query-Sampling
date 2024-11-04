@@ -22,7 +22,7 @@ def calculate_time_tree_sampling(root, selectivity, total_length,k):
 
 def calculate_time_tree_alias(root, selectivity, total_length,k):
     start = time.time()
-    start_index,end_index = generate_random_interval(total_length, selectivity)
+    start_index,end_index = generate_random_interval(selectivity, total_length)
     canonical, weights = find_paths_and_collect(root,random_list[start_index],random_list[end_index]) # Find the canonical nodes
     basic_sampling_preprocess(canonical, weights)
     result = basic_sampling(canonical, k) # Sample a canonical node firstly using basic sample
@@ -34,7 +34,7 @@ def calculate_time_tree_alias(root, selectivity, total_length,k):
 
 def calculate_time_tree_alias_alias(root, selectivity, total_length,k):
     start = time.time()
-    start_index,end_index = generate_random_interval(total_length, selectivity)
+    start_index,end_index = generate_random_interval(selectivity, total_length)
     canonical, weights = find_paths_and_collect(root,start_index,end_index) # Find the canonical nodes
     basic_sampling_preprocess(canonical, weights)
     result = alias_sampling(canonical, k) # Sample a canonical node firstly from AS Sampling*
