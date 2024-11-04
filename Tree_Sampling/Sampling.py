@@ -1,5 +1,6 @@
 import random
 from Tree_Sampling.Sample_Tools import traverse_path
+from Tree_Sampling.Python_Sample import weighted_sampling
 def find_canonical_nodes(root, x, y): # 添加Search Key
     # Find the left path and the right path......
     # 左拐和右拐的情况
@@ -47,16 +48,21 @@ def basic_sampling_preprocess(canonical_nodes,weights):
         node.sample_weight = node.weight / weights
 
 def basic_sampling(canonical_nodes,times):
+    """
+    Warning!!!!
+    This function is modified by using python version of the weighted sampling.
+    """
     # canonical_nodes:[node 1,node 2,node 3,...,node n]
     # weights: [w1,w2,w3,w4]
+    sampled = []
     prob_list = []
-
     for i in range(len(canonical_nodes)):
             prob_list.append(canonical_nodes[i].weight)
-    sample = random.choices(canonical_nodes, weights=prob_list, k=times)  # 根据权重进行随机采样
-    return sample  # Return sampled value
-
-
+    # sample = random.choices(canonical_nodes, weights=prob_list, k=times)  # 根据权重进行随机采样?
+    index = weighted_sampling(prob_list,times)
+    for i in index:
+        sampled.append(canonical_nodes[i])
+    return sampled  # Return sampled value
 
 def leaf_sampling(node):
     if node.is_leaf():

@@ -79,7 +79,7 @@ if __name__ == '__main__':
     time_vals_alias = []
     time_vals_alias_alias = []
     selectivity_vals = []
-    k = 300
+    k = 10000
     round = 100
     for i in range(1,10):# ratio from 1% to 9%
         r_canonical = 0
@@ -87,15 +87,15 @@ if __name__ == '__main__':
         r_alias = 0
         r_alias_alias = 0
         for r in range(round):
-            r_canonical += calculate_time_tree_sampling(root, i / 10, num_nodes,k) # calculate the running time
+            # r_canonical += calculate_time_tree_sampling(root, i / 10, num_nodes,k) # calculate the running time
             # r_compare += calculate_time_compare(root, i / 10, num_nodes,k)
             r_alias += calculate_time_tree_alias(root, i / 10, num_nodes, k)
             r_alias_alias += calculate_time_tree_alias_alias(root, i / 10, num_nodes, k)
         # print(f"Time taken to sample {r_compare / round} when selectivity is {i / 10} [compare]")
-        print(f"Time taken to sample {r_canonical / round} when selectivity is {i / 10} [canonical]")
+        # print(f"Time taken to sample {r_canonical / round} when selectivity is {i / 10} [canonical]")
         print(f"Time taken to sample {r_alias / round} when selectivity is {i / 10} [alias]")
         print(f"Time taken to sample {r_alias_alias / round} when selectivity is {i / 10} [alias-alias]")
-        time_vals_canonical.append(r_canonical / round)
+        # time_vals_canonical.append(r_canonical / round)
         # time_vals_compare.append(r_compare / round)
         time_vals_alias.append(r_alias / round)
         time_vals_alias_alias.append(r_alias_alias / round)
@@ -120,7 +120,7 @@ if __name__ == '__main__':
     ax2.plot(selectivity_vals, time_vals_alias, label='Alias')
     ax2.plot(selectivity_vals, time_vals_alias_alias, label='Alias-Alias')
     ax2.set_ylabel('Time')
-    ax2.plot(selectivity_vals, time_vals_canonical, label='Canonical')
+    # ax2.plot(selectivity_vals, time_vals_canonical, label='Canonical')
     ax2.set_xlabel('Selectivity')
     ax2.legend()
     plt.title(f'Nodes: {num_nodes}, Memory Cost: {memory_info.rss / (1024 * 1024 * 1024):.2f} GB, S = {k}')
