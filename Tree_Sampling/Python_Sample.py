@@ -2,6 +2,16 @@ import random
 import bisect
 from collections import defaultdict
 
+def binary_search_right(cumulative_weights, value):
+    """手动实现 bisect_right 的功能"""
+    low, high = 0, len(cumulative_weights)
+    while low < high:
+        mid = (low + high) // 2
+        if cumulative_weights[mid] <= value:
+            low = mid + 1
+        else:
+            high = mid
+    return low
 
 def weighted_sampling(weights, s):
     # 计算权重的累积和
@@ -17,7 +27,7 @@ def weighted_sampling(weights, s):
         # 生成一个随机数，范围在 [0, total_weight)
         rand_value = random.uniform(0, total_weight)
         # 使用二分查找找到该随机数对应的索引
-        index = bisect.bisect_right(cumulative_weights, rand_value)
+        index = binary_search_right(cumulative_weights, rand_value)
         sampled_indices.append(index)
 
     return sampled_indices

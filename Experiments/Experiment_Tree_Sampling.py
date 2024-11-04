@@ -6,6 +6,7 @@ from Tree_Sampling.Sampling import find_canonical_nodes_new, basic_sampling, lea
     find_paths_and_collect, basic_sampling_preprocess, update_intervals
 from Tree_Sampling.TreeNode import TreeNode
 from Tree_Sampling.Sampling_Alias import leaf_sampling_alias, alias_sampling, alias_sampling_direct
+from Experiments.Exp_Generator import generate_random_interval
 
 
 def calculate_time_tree_sampling(root, selectivity, total_length,k):
@@ -21,7 +22,8 @@ def calculate_time_tree_sampling(root, selectivity, total_length,k):
 
 def calculate_time_tree_alias(root, selectivity, total_length,k):
     start = time.time()
-    canonical, weights = find_paths_and_collect(root, random_list[0], random_list[int(total_length * selectivity)]) # Find the canonical nodes
+    start_index,end_index = generate_random_interval(total_length, selectivity)
+    canonical, weights = find_paths_and_collect(root,random_list[start_index],random_list[end_index]) # Find the canonical nodes
     basic_sampling_preprocess(canonical, weights)
     result = basic_sampling(canonical, k) # Sample a canonical node firstly using basic sample
     for node in result:
@@ -32,7 +34,8 @@ def calculate_time_tree_alias(root, selectivity, total_length,k):
 
 def calculate_time_tree_alias_alias(root, selectivity, total_length,k):
     start = time.time()
-    canonical, weights = find_paths_and_collect(root, random_list[0], random_list[int(total_length * selectivity)]) # Find the canonical nodes
+    start_index,end_index = generate_random_interval(total_length, selectivity)
+    canonical, weights = find_paths_and_collect(root,start_index,end_index) # Find the canonical nodes
     basic_sampling_preprocess(canonical, weights)
     result = alias_sampling(canonical, k) # Sample a canonical node firstly from AS Sampling*
     for node in result:
