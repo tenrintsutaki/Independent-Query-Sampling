@@ -62,7 +62,7 @@ def print_heights(node_list):
 if __name__ == '__main__':
     # Test Methods of the Construction
 
-    num_nodes = 1000000
+    num_nodes = 1400000
     random_list = random_tree_assigned(num_nodes)
     weights = generate_random_weights(num_nodes)
 
@@ -82,13 +82,13 @@ if __name__ == '__main__':
     memory_info = process.memory_info()
     memory_cost_after_tree = memory_info.rss
     print(f"Memory Usage: {(memory_cost_after_tree - memory_cost_before_tree) / (1024 * 1024):.2f} MB")
-    k = 300
+    k = 10
     round = 1
     root_height = calculate_height(root)
-    for i in range(1, 900):  # ratio from 1% to 9%
+    for i in range(1, 80):  # ratio from 1% to 9%
         for r in range(round):
-            vals_canonical.append(i / 1000)
-            canonicals = calculate_time_tree_sampling(root, i / 1000, num_nodes, k)  # calculate the running time
+            vals_canonical.append(i / 100)
+            canonicals = calculate_time_tree_sampling(root, i / 100, num_nodes, k)  # calculate the running time
             axis.append(max(print_heights(canonicals)))
             # print(f"height:  {max(print_heights(canonicals))}/{root_height}, selectivity = {i / 1000}")
 
@@ -97,5 +97,5 @@ if __name__ == '__main__':
     ax2.set_xlabel('Selectivity')
     ax2.set_ylabel('Max_Height')
     ax2.legend()
-    plt.title(f'Nodes: {num_nodes}, Memory Cost: {memory_info.rss / (1024 * 1024 * 1024):.2f} GB, S = {k}')
+    plt.title(f'Nodes: {num_nodes}')
     plt.show()
