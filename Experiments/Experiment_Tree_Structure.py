@@ -85,7 +85,7 @@ if __name__ == '__main__':
     k = 300
     round = 1
     root_height = calculate_height(root)
-    for i in range(1, 800):  # ratio from 1% to 9%
+    for i in range(1, 900):  # ratio from 1% to 9%
         for r in range(round):
             vals_canonical.append(i / 1000)
             canonicals = calculate_time_tree_sampling(root, i / 1000, num_nodes, k)  # calculate the running time
