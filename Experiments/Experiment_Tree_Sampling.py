@@ -82,7 +82,7 @@ if __name__ == '__main__':
     time_vals_alias = []
     time_vals_alias_alias = []
     selectivity_vals = []
-    k = 10000
+    k = 20000
     round = 100
     for i in range(1,10):# ratio from 1% to 9%
         r_canonical = 0
@@ -118,8 +118,6 @@ if __name__ == '__main__':
     # ax1.legend()
     # plt.title(f'Nodes: {num_nodes}, Memory Cost: {memory_info.rss / (1024 * 1024 * 1024):.2f} GB, S = {k}')
     # plt.show()
-
-    fig2, ax2 = plt.subplots()
     # 展开 y 列表，同时复制相应的 x 值
 
     x_values = []
@@ -134,12 +132,13 @@ if __name__ == '__main__':
         # 对于 y 中的每个子列表 yi，复制 x[i] 并与 yi 中的每个值配对
         y2_values.extend(yi)
 
-    ax2.scatter(x_values, y_values, label='Alias')
-    ax2.scatter(x_values, y2_values, label='Alias-Alias')
-    ax2.set_ylabel('Time')
+    plt.figure(figsize=(5, 8))
+    plt.scatter(x_values, y_values, label='Alias')
+    plt.scatter(x_values, y2_values, label='Alias-Alias')
+    plt.ylabel('Time')
     # ax2.plot(selectivity_vals, time_vals_canonical, label='Canonical')
-    ax2.set_xlabel('Selectivity')
-    ax2.legend()
+    plt.xlabel('Selectivity')
+    plt.legend()
     plt.title(f'Nodes: {num_nodes}, Memory Cost: {memory_info.rss / (1024 * 1024 * 1024):.2f} GB, S = {k}')
     plt.show()
     # 图拉得高一些，坐标轴需要变换一下

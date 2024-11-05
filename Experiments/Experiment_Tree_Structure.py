@@ -2,6 +2,7 @@ import time
 
 from matplotlib import pyplot as plt
 
+from Experiments.Exp_Generator import generate_random_interval
 from Tree_Sampling.Construction_Tools import *
 from Tree_Sampling.Sample_Tools import calculate_weight, update_internal_nodes,calculate_height
 from Tree_Sampling.Sampling import find_canonical_nodes_new, basic_sampling, leaf_sampling, find_canonical_nodes, \
@@ -12,13 +13,12 @@ from Tree_Sampling.Sampling_Alias import leaf_sampling_alias, alias_sampling, al
 
 
 def calculate_time_tree_sampling(root, selectivity, total_length,k):
-    start = time.time()
-    canonical, weights = find_paths_and_collect(root, random_list[0], random_list[int(total_length * selectivity)]) # Find the canonical nodes
+    start_index, end_index = generate_random_interval(selectivity, total_length)
+    canonical, weights = find_paths_and_collect(root, random_list[start_index],random_list[end_index])  # Find the canonical nodes
     basic_sampling_preprocess(canonical, weights)
     result = basic_sampling(canonical, k) # Sample a canonical node firstly
     for node in result:
         leaf_sampling(node) # Then use leaf sampling to get the result
-    end = time.time()
     # print(f"Time taken to sample {end - start} when selectivity is {selectivity}")
     return canonical
 
@@ -62,7 +62,7 @@ def print_heights(node_list):
 if __name__ == '__main__':
     # Test Methods of the Construction
 
-    num_nodes = 1400000
+    num_nodes = 1000000
     random_list = random_tree_assigned(num_nodes)
     weights = generate_random_weights(num_nodes)
 
@@ -89,13 +89,13 @@ if __name__ == '__main__':
         for r in range(round):
             vals_canonical.append(i / 100)
             canonicals = calculate_time_tree_sampling(root, i / 100, num_nodes, k)  # calculate the running time
-            axis.append(max(print_heights(canonicals)))
+            axis.append(len(canonicals))
             # print(f"height:  {max(print_heights(canonicals))}/{root_height}, selectivity = {i / 1000}")
 
     fig2, ax2 = plt.subplots()
     ax2.plot(vals_canonical,axis)
     ax2.set_xlabel('Selectivity')
-    ax2.set_ylabel('Max_Height')
+    ax2.set_ylabel('Canonical Number')
     ax2.legend()
     plt.title(f'Nodes: {num_nodes}')
     plt.show()
