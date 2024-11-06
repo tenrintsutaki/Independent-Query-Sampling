@@ -32,7 +32,8 @@ def generate(num,path):
 def preprocess(path,feature):
     data = pd.read_csv(path)
     num_list = data[feature]
-    return num_list.unique(),num_list.values
+    grouped = data.groupby('Age')['ID'].apply(list).to_dict()
+    return num_list.unique(),num_list.values,grouped
 
 def weight_compute(input_data):
     d = collections.defaultdict(int)
@@ -42,7 +43,7 @@ def weight_compute(input_data):
 
 if __name__ == "__main__":
     generate(100000,'data/data.csv')
-    unique,values = preprocess('data/data.csv','Age')
+    unique,values,grouped_id = preprocess('data/data.csv','Age')
     unique.sort()
     ls = []
     for u in unique:
