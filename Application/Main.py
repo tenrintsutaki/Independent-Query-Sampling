@@ -26,10 +26,7 @@ if __name__ == '__main__':
     build_AS_structure(root)
 
     # APPLICATION PART#
-    temp,total_num = sampling_application(root,left_val,right_val,k,df)
+    query = "Gender == 1 and Married == 0"
+    query_rate = sampling_application(root,left_val,right_val,k,df,query)
+    print(f"Rate of this query:",query_rate)
 
-    for node in temp:
-        print(node)
-        print(node.weight)
-        print(node.ptrs)
-        print("\n")
