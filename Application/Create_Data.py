@@ -10,8 +10,10 @@ from Tree_Sampling.Sample_Tools import calculate_weight, update_internal_nodes
 def generate(num,path):
     id = np.linspace(1,num,num,dtype=int)
     print(id)
-    np.random.seed(42)
+    np.random.seed(114514)
     age = np.random.randint(18, 66, size=num) # 生成100个年龄数据，范围在18到65
+    gender = np.random.randint(0, 2, size=num)
+    married = np.random.randint(0, 2, size=num)
     slope = 3000  # 线性斜率
     intercept = 20000  # 截距
     income = intercept + slope * (age - 18) + np.random.normal(0, 10000, size=age.shape)
@@ -19,7 +21,9 @@ def generate(num,path):
     data = pd.DataFrame({
         'ID': id,
         'Age': age,
-        'Income': income
+        'Income': income,
+        'Gender' : gender,
+        'Married': married,
     })
     # 将数据写入 CSV 文件
     data.to_csv(path,index=False)
