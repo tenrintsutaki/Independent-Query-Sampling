@@ -8,7 +8,7 @@ from Application.App_Sampling import sampling_application
 if __name__ == '__main__':
     left_val = 20
     right_val = 35
-    k = 5
+    k = 500
     generate(100000,'data/data.csv')
     df = pd.read_csv('data/data.csv')
     unique,values,grouped_id = preprocess('data/data.csv','Age')
