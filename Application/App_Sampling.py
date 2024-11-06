@@ -10,3 +10,4 @@ def sampling_application(root,values,left_idx,right_idx,k):
     total_records_num = calculate_records_num(canonical)
     basic_sampling_preprocess(canonical, weights)
     result = basic_sampling(canonical, k) # Sampled K Nodes as the result
+

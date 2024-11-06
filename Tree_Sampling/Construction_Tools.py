@@ -43,6 +43,25 @@ def construct_bst(sorted_array, weights, leaf_index = 0):
     root.right = right_child
     return root,leaf_index
 
+def construct_bst_with_element(sorted_array, weights, elements, leaf_index = 0):
+    if not sorted_array:
+        return None, leaf_index
+
+    if len(sorted_array) == 1: # For leaf nodes
+        weight = weights[leaf_index]
+        leaf_index = leaf_index + 1
+        ptrs = elements[sorted_array[0]]
+        return TreeNode(val = sorted_array[0], weight = weight, ptrs = ptrs), leaf_index
+
+    mid = len(sorted_array) // 2
+    left_child,leaf_index  = construct_bst_with_element(sorted_array[:mid], weights, elements, leaf_index)
+    right_child,leaf_index = construct_bst_with_element(sorted_array[mid:], weights, elements, leaf_index)
+    root = TreeNode()
+    root.val = find_min_in_right_subtree(right_child)
+    root.left = left_child
+    root.right = right_child
+    return root,leaf_index
+
 def build_AS_structure(root):
     """
     Build the AS structure for the BST
