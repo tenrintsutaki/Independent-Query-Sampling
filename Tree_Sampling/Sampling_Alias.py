@@ -8,6 +8,12 @@ def leaf_sampling_alias(node):
         return node
     else:
         return node.AS.sample()
+
+def leaf_sampling_alias_application(node):
+    if node.is_leaf():
+        return node
+    else:
+        return node.leaves[node.AS.sample()]
 def alias_sampling(canonical_nodes,times):
     probs = []
     results = []

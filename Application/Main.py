@@ -27,4 +27,9 @@ if __name__ == '__main__':
 
     # APPLICATION PART#
     temp,total_num = sampling_application(root,left_val,right_val,k,df)
-    print(temp)
+
+    for node in temp:
+        print(node)
+        print(node.weight)
+        print(node.ptrs)
+        print("\n")

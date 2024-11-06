@@ -84,7 +84,7 @@ def build_AS_structure(root):
     alias_structure = AliasStructure(probs)
     root.AS = alias_structure
     root.AS.initialize()
-
+    root.leaves = leaves
     build_AS_structure(root.left)
     build_AS_structure(root.right)
 
