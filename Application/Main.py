@@ -8,7 +8,7 @@ from Application.App_Sampling import sampling_application
 if __name__ == '__main__':
     left_val = 20
     right_val = 35
-    k = 500
+    k = 5000
     generate(100000,'data/data.csv')
     df = pd.read_csv('data/data.csv')
     unique,values,grouped_id = preprocess('data/data.csv','Age')
@@ -19,14 +19,15 @@ if __name__ == '__main__':
         ls.append(u)
 
     weight_dict = sorted(weight_compute(values).items(),key = lambda x:x[0])
-    elements = [item[0] for item in weight_dict]
+    elements = [item[1] for item in weight_dict]
     root,leaf_index = construct_bst_with_element(ls, elements, grouped_id)
     calculate_weight(root)
     update_internal_nodes(root)
     build_AS_structure(root)
 
     # APPLICATION PART#
-    query = "Gender == 1 and Married == 0"
-    query_rate = sampling_application(root,left_val,right_val,k,df,query)
-    print(f"Rate of this query:",query_rate)
+    query = "Gender == 0 and Married == 1"
+    query_rate,total_number = sampling_application(root,left_val,right_val,k,df,query)
+    print(f"Rate of this query in sampling is:",query_rate)
+    print(f"Estimated there are {int(query_rate * total_number)} records satisfied this condition.")
 

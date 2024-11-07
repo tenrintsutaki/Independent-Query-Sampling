@@ -24,7 +24,7 @@ def sampling_application(root,left_val,right_val,k,df,query):
         record = df[df["ID"] == id]
         if(check_rule(query,record)):
             correct += 1
-    return correct / k
+    return (correct / k),total_records_num
 
 def check_rule(query,row):
     row_dict = row.to_dict('records')[0] # 神奇代码 完全看不懂但是管用
