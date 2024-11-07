@@ -6,11 +6,12 @@ from Tree_Sampling.Sample_Tools import calculate_weight, update_internal_nodes
 
 def generate(num,path):
     id = np.linspace(1,num,num,dtype=int)
-    print(id)
     np.random.seed(114514)
     age = np.random.randint(18, 66, size=num) # 生成100个年龄数据，范围在18到65
     gender = np.random.randint(0,2, size=num)
-    married = np.random.randint(0,2, size=num)
+    # married = np.random.randint(0,2, size=num)
+    probabilities = [0.5,0.5]
+    married = np.random.choice([0, 1], size=num, p=probabilities)
     slope = 3000  # 线性斜率
     intercept = 20000  # 截距
     income = intercept + slope * (age - 18) + np.random.normal(0, 10000, size=age.shape)
