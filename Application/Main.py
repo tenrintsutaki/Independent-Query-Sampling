@@ -1,4 +1,6 @@
+import numpy as np
 import pandas as pd
+from matplotlib import pyplot as plt
 
 from Application.Create_Data import generate, preprocess, weight_compute
 from Tree_Sampling.Construction_Tools import construct_bst, build_AS_structure, construct_bst_with_element
@@ -35,3 +37,29 @@ if __name__ == '__main__':
     print(f"Rate of this query in sampling is:",query_rate)
     print(f"Estimated there are {int(query_rate * total_number)} records in {total_number} satisfied this condition.")
 
+    total_num_list = []
+    k_list = []
+    for k in range(10,2000,50):
+        temp = []
+        for i in range(10):
+            estimate,total_number = sampling_application(root, left_val, right_val, k, df, query)
+            temp.append(int(estimate * total_number))
+        total_num_list.append(np.var(temp, ddof=0))
+        k_list.append(k)
+
+    # x_values = []
+    # y_values = []
+    #
+    # for i, yi in enumerate(total_num_list):
+    #     # 对于 y 中的每个子列表 yi，复制 x[i] 并与 yi 中的每个值配对
+    #     x_values.extend([k_list[i]] * len(yi))
+    #     y_values.extend(yi)
+
+    plt.figure(figsize=(5, 5))
+    plt.plot(k_list, total_num_list)
+    plt.ylabel('Variance')
+    # ax2.plot(selectivity_vals, time_vals_canonical, label='Canonical')
+    plt.xlabel('K')
+    plt.legend()
+    # plt.title(f'Nodes: {num_nodes}, Memory Cost: {memory_info.rss / (1024 * 1024 * 1024):.2f} GB, S = {k}')
+    plt.show()
