@@ -1,0 +1,19 @@
+
+NAME FORMAT:
+
+N_{N}_s_{s}.csv
+
+For Example:
+
+N_1000000_s_5.csv
+
+COL1, COL2, COL3, COL4
+
+Selectivity, Time1, Time2, Time3
+
+s1, Tree1, Alias1, Double1
+s1, Tree1, Alias1, Double1
+s1, Tree1, Alias1, Double1
+s1, Tree1, Alias1, Double1
+s1, Tree1, Alias1, Double1
+s1, Tree1, Alias1, Double1

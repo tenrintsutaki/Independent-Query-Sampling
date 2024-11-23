@@ -1,4 +1,7 @@
 import time
+
+import pandas as pd
+
 from Tree_Sampling.Construction_Tools import *
 from Tree_Sampling.Sample_Tools import calculate_weight, update_internal_nodes
 from Tree_Sampling.Sampling import find_canonical_nodes_new, basic_sampling, leaf_sampling, find_canonical_nodes, \
@@ -56,10 +59,9 @@ def calculate_time_compare(root, selectivity, total_length,k):
 if __name__ == '__main__':
     # Test Methods of the Construction
 
-    num_nodes = 1000000
+    num_nodes = 50000
     random_list = random_tree_assigned(num_nodes)
     weights = generate_random_weights(num_nodes)
-
 
     process = psutil.Process(os.getpid())
     memory_info = process.memory_info()
@@ -82,27 +84,29 @@ if __name__ == '__main__':
     time_vals_alias = []
     time_vals_alias_alias = []
     selectivity_vals = []
-    k = 20000
-    round = 100
-    for i in range(1,10):# ratio from 1% to 9%
-        r_canonical = 0
+    s = 1
+    k = int((s / 100) * num_nodes)
+    round = 10
+    for i in range(1,100):# ratio from 1% to 9%
+        selectivity = random.random()
+        r_canonical = []
         r_compare = 0
         r_alias = []
         r_alias_alias = []
         for r in range(round):
-            # r_canonical += calculate_time_tree_sampling(root, i / 10, num_nodes,k) # calculate the running time
+            r_canonical.append(calculate_time_tree_sampling(root, selectivity, num_nodes,k)) # calculate the running time
             # r_compare += calculate_time_compare(root, i / 10, num_nodes,k)
-            r_alias.append(calculate_time_tree_alias(root, i / 10, num_nodes, k))
-            r_alias_alias.append(calculate_time_tree_alias_alias(root, i / 10, num_nodes, k))
+            r_alias.append(calculate_time_tree_alias(root, selectivity, num_nodes, k))
+            r_alias_alias.append(calculate_time_tree_alias_alias(root, selectivity, num_nodes, k))
         # print(f"Time taken to sample {r_compare / round} when selectivity is {i / 10} [compare]")
         # print(f"Time taken to sample {r_canonical / round} when selectivity is {i / 10} [canonical]")
         # print(f"Time taken to sample {r_alias / round} when selectivity is {i / 10} [alias]")
         # print(f"Time taken to sample {r_alias_alias / round} when selectivity is {i / 10} [alias-alias]")
-        # time_vals_canonical.append(r_canonical / round)
+        time_vals_canonical.append(r_canonical)
         # time_vals_compare.append(r_compare / round)
         time_vals_alias.append(r_alias)
         time_vals_alias_alias.append(r_alias_alias)
-        selectivity_vals.append(i / 10)
+        selectivity_vals.append(selectivity)
     # Count the node amount in the interval
 
     import numpy as np
@@ -122,23 +126,43 @@ if __name__ == '__main__':
 
     x_values = []
     y_values = []
+    y1_values = []
     y2_values = []
-    for i, yi in enumerate(time_vals_alias):
+
+    for i, yi in enumerate(time_vals_canonical):
         # 对于 y 中的每个子列表 yi，复制 x[i] 并与 yi 中的每个值配对
         x_values.extend([selectivity_vals[i]] * len(yi))
         y_values.extend(yi)
+
+    for i, yi in enumerate(time_vals_alias):
+        # 对于 y 中的每个子列表 yi，复制 x[i] 并与 yi 中的每个值配对
+        y1_values.extend(yi)
 
     for i, yi in enumerate(time_vals_alias_alias):
         # 对于 y 中的每个子列表 yi，复制 x[i] 并与 yi 中的每个值配对
         y2_values.extend(yi)
 
-    plt.figure(figsize=(5, 8))
-    plt.scatter(x_values, y_values, label='Alias')
-    plt.scatter(x_values, y2_values, label='Alias-Alias')
-    plt.ylabel('Time')
-    # ax2.plot(selectivity_vals, time_vals_canonical, label='Canonical')
-    plt.xlabel('Selectivity')
-    plt.legend()
-    plt.title(f'Nodes: {num_nodes}, Memory Cost: {memory_info.rss / (1024 * 1024 * 1024):.2f} GB, S = {k}')
-    plt.show()
-    # 图拉得高一些，坐标轴需要变换一下
+    data = {
+        'Selectivity': x_values,
+        'Tree_Traverse': y_values,
+        'Alias': y1_values,
+        'Double-Alias': y2_values
+    }
+
+    # 创建DataFrame
+    df = pd.DataFrame(data)
+
+    # 保存为CSV文件
+    df.to_csv(f'data/N_{num_nodes}_s_{s}.csv', index=False)
+
+    #
+    # plt.figure(figsize=(5, 8))
+    # plt.scatter(x_values, y_values, label='Alias')
+    # plt.scatter(x_values, y2_values, label='Alias-Alias')
+    # plt.ylabel('Time')
+    # # ax2.plot(selectivity_vals, time_vals_canonical, label='Canonical')
+    # plt.xlabel('Selectivity')
+    # plt.legend()
+    # plt.title(f'Nodes: {num_nodes}, Memory Cost: {memory_info.rss / (1024 * 1024 * 1024):.2f} GB, S = {k}')
+    # plt.show()
+    # # 图拉得高一些，坐标轴需要变换一下

@@ -21,11 +21,12 @@ def generate_random_interval(selectivity,total_len):
 
     return start, end
 
+
 if __name__ == '__main__':
     res = []
-    total_len = 100
-    selectivity = 0.85
+    total_len = 1000000
     for i in range(100000):
+        selectivity = random.random()
         start, end = generate_random_interval(selectivity,total_len)
         print(start, end)
 
