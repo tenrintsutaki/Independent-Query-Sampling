@@ -21,7 +21,9 @@ def plot_IQS_3lines(df,n,s):
     plt.grid(True, linestyle='--', alpha=0.7)
 
     # 显示图形
+    plt.savefig(f"images/N_{n}_s_{s}_3lines.png", dpi=300, bbox_inches="tight")  # 保存为 PNG 文件
     plt.show()
+
 
 def plot_IQS_2lines(df,n,s):
     # 自定义颜色和标签
@@ -43,11 +45,12 @@ def plot_IQS_2lines(df,n,s):
     plt.grid(True, linestyle='--', alpha=0.7)
 
     # 显示图形
+    plt.savefig(f"images/N_{n}_s_{s}_2lines.png", dpi=300, bbox_inches="tight")  # 保存为 PNG 文件
     plt.show()
 
 if __name__ == "__main__":
     # 读取 CSV 文件
-    file_name = 'N_50000_s_1.csv'
+    file_name = 'N_1000000_s_1.csv'
     df = pd.read_csv(file_name)
     n = int(file_name.split("_")[1])
     s = int(file_name.split("_")[-1][0])
