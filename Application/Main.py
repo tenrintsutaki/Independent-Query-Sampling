@@ -32,21 +32,22 @@ if __name__ == '__main__':
 
     # APPLICATION PART#
     query = "Gender == 0 and Married == 0"
-    query_rate,total_number = sampling_application(root,left_val,right_val,k,df,query)
+    query_rate,total_number,values = sampling_application(root,left_val,right_val,k,df,query)
     print("------ Sampling Result ------")
     print(f"Rate of this query in sampling is:",query_rate)
     print(f"Estimated there are {int(query_rate * total_number)} records in {total_number} satisfied this condition.")
 
     total_num_list = []
+    total_num_list_upper = []
+    total_num_list_lower = []
     k_list = []
     for k in range(10,2000,50):
-        temp = []
-        for i in range(10):
-            estimate,total_number = sampling_application(root, left_val, right_val, k, df, query)
-            temp.append(int(estimate * total_number))
-        total_num_list.append(np.var(temp, ddof=0))
+        estimate,total_number,values = sampling_application(root, left_val, right_val, k, df, query)
+        total_num_list.append(np.mean(values))
         k_list.append(k)
-
+    for val in total_num_list:
+        total_num_list_upper.append(val + (np.std(val) * 1.96) / np.sqrt(len(total_num_list)))
+        total_num_list_lower.append(val - (np.std(val) * 1.96) / np.sqrt(len(total_num_list)))
     # x_values = []
     # y_values = []
     #
@@ -57,6 +58,8 @@ if __name__ == '__main__':
 
     plt.figure(figsize=(5, 5))
     plt.plot(k_list, total_num_list)
+    plt.plot(k_list, total_num_list_upper)
+    plt.plot(k_list, total_num_list_lower)
     plt.ylabel('Variance')
     # ax2.plot(selectivity_vals, time_vals_canonical, label='Canonical')
     plt.xlabel('K')
