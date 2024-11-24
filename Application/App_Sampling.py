@@ -15,6 +15,7 @@ def sampling_application(root,left_val,right_val,k,df,query):
     basic_sampling_preprocess(canonical, weights)
     result = alias_sampling(canonical, k) # Sample a canonical node firstly from AS Sampling*
     leaves = []
+    values = []
     for node in result:
         res = leaf_sampling_alias_application(node) # Then use alias sampling to get the result
         leaves.append(res)
@@ -24,7 +25,10 @@ def sampling_application(root,left_val,right_val,k,df,query):
         record = df[df["ID"] == id]
         if(check_rule(query,record)):
             correct += 1
-    return (correct / k),total_records_num
+            values.append(1)
+        else:
+            values.append(0)
+    return (correct / k),total_records_num,values
 
 def check_rule(query,row):
     row_dict = row.to_dict('records')[0] # 神奇代码 完全看不懂但是管用
