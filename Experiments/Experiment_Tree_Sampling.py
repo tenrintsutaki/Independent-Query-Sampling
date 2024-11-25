@@ -10,6 +10,7 @@ from Tree_Sampling.Sampling import find_canonical_nodes_new, basic_sampling, lea
 from Tree_Sampling.TreeNode import TreeNode
 from Tree_Sampling.Sampling_Alias import leaf_sampling_alias, alias_sampling, alias_sampling_direct
 from Experiments.Exp_Generator import generate_random_interval
+from Experiment_Space import calculate_tree_memory
 
 
 def calculate_time_tree_sampling(root, selectivity, total_length,k):
@@ -72,12 +73,9 @@ if __name__ == '__main__':
     update_internal_nodes(root)
     # update_intervals(root)
     # build_AS_structure_direct_node(root)
-    build_AS_structure(root)
+    build_AS_structure(root) #BUILD AS
 
-    process = psutil.Process(os.getpid())
-    memory_info = process.memory_info()
-    memory_cost_after_tree = memory_info.rss
-    print(f"Memory Usage: {(memory_cost_after_tree - memory_cost_before_tree) / (1024 * 1024):.2f} MB")
+    print(f"Memory Cost of Tree: {calculate_tree_memory(root) / (1024 * 1024 * 1024)} GB")
 
     time_vals_canonical = []
     time_vals_compare = []
@@ -152,8 +150,8 @@ if __name__ == '__main__':
     # 创建DataFrame
     df = pd.DataFrame(data)
 
-    # 保存为CSV文件
-    df.to_csv(f'data/N_{num_nodes}_s_{s}.csv', index=False)
+    # # 保存为CSV文件
+    # df.to_csv(f'data/N_{num_nodes}_s_{s}.csv', index=False)
 
     #
     # plt.figure(figsize=(5, 8))
