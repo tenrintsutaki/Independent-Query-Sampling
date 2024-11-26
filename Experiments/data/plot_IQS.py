@@ -54,7 +54,7 @@ def plot_IQS_2lines(df,n,s):
 
 if __name__ == "__main__":
     # 读取 CSV 文件
-    file_name = 'N_750000_s_1.csv'
+    file_name = 'N_1000000_s_1.csv'
     df = pd.read_csv(file_name)
     n = int(file_name.split("_")[1])
     s = file_name.split("_")[-1][0:1]

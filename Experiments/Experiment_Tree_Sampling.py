@@ -60,7 +60,7 @@ def calculate_time_compare(root, selectivity, total_length,k):
 if __name__ == '__main__':
     # Test Methods of the Construction
 
-    num_nodes = 750000
+    num_nodes = 1000000
     random_list = random_tree_assigned(num_nodes)
     weights = generate_random_weights(num_nodes)
 
