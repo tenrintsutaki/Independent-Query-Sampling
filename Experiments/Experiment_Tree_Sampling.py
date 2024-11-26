@@ -41,12 +41,12 @@ def calculate_time_tree_alias_alias(root, selectivity, total_length,k):
     start_index,end_index = generate_random_interval(selectivity, total_length)
     canonical, weights = find_paths_and_collect(root,start_index,end_index) # Find the canonical nodes
     basic_sampling_preprocess(canonical, weights)
-    result = alias_sampling(canonical, k) # Sample a canonical node firstly from AS Sampling*
+    result,memory_overhead = alias_sampling(canonical, k) # Sample a canonical node firstly from AS Sampling*
     for node in result:
         leaf_sampling_alias(node) # Then use alias sampling to get the result
     end = time.time()
     # print(f"Time taken to sample {end - start} when selectivity is {selectivity} [Alias]")
-    return end - start
+    return end - start, memory_overhead
 
 def calculate_time_compare(root, selectivity, total_length,k):
     start = time.time()
@@ -60,7 +60,7 @@ def calculate_time_compare(root, selectivity, total_length,k):
 if __name__ == '__main__':
     # Test Methods of the Construction
 
-    num_nodes = 1000000
+    num_nodes = 750000
     random_list = random_tree_assigned(num_nodes)
     weights = generate_random_weights(num_nodes)
 
@@ -75,7 +75,7 @@ if __name__ == '__main__':
     # build_AS_structure_direct_node(root)
     build_AS_structure(root) #BUILD AS
 
-    print(f"Memory Cost of Tree: {calculate_tree_memory(root) / (1024 * 1024 * 1024)} GB")
+    print(f"Memory Cost of Tree: {calculate_tree_memory(root) / (1024 * 1024 * 1024)} GB for nodes: {num_nodes}")
 
     time_vals_canonical = []
     time_vals_compare = []
@@ -83,8 +83,9 @@ if __name__ == '__main__':
     time_vals_alias_alias = []
     selectivity_vals = []
     s = 1
-    k = int((s / 1000) * num_nodes)
+    k = int((s / 100) * num_nodes)
     round = 10
+    extra_alias_memory = []
     for i in range(1,100):# ratio from 1% to 9%
         selectivity = random.random()
         r_canonical = []
@@ -95,7 +96,9 @@ if __name__ == '__main__':
             r_canonical.append(calculate_time_tree_sampling(root, selectivity, num_nodes,k)) # calculate the running time
             # r_compare += calculate_time_compare(root, i / 10, num_nodes,k)
             r_alias.append(calculate_time_tree_alias(root, selectivity, num_nodes, k))
-            r_alias_alias.append(calculate_time_tree_alias_alias(root, selectivity, num_nodes, k))
+            time_cost,memory = calculate_time_tree_alias_alias(root, selectivity, num_nodes, k)
+            r_alias_alias.append(time_cost)
+            extra_alias_memory.append(memory)
         # print(f"Time taken to sample {r_compare / round} when selectivity is {i / 10} [compare]")
         # print(f"Time taken to sample {r_canonical / round} when selectivity is {i / 10} [canonical]")
         # print(f"Time taken to sample {r_alias / round} when selectivity is {i / 10} [alias]")
@@ -109,7 +112,8 @@ if __name__ == '__main__':
 
     import numpy as np
     import matplotlib.pyplot as plt
-
+    avg_memory = sum(extra_alias_memory) / len(extra_alias_memory)
+    print(f"Memory Cost of Tree: {calculate_tree_memory(root) / (1024 * 1024 * 1024) + avg_memory} GB for nodes: {num_nodes}")
     # Generate some sample data
     # fig1, ax1 = plt.subplots()
     # ax1.plot(selectivity_vals, time_vals_compare, label='Compare')
@@ -150,8 +154,8 @@ if __name__ == '__main__':
     # 创建DataFrame
     df = pd.DataFrame(data)
 
-    # # 保存为CSV文件
-    # df.to_csv(f'data/N_{num_nodes}_s_{s}.csv', index=False)
+    # 保存为CSV文件
+    df.to_csv(f'data/N_{num_nodes}_s_{s}.csv', index=False)
 
     #
     # plt.figure(figsize=(5, 8))

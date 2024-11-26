@@ -1,6 +1,7 @@
 import random
 
 from Alias.Alias_Structure import AliasStructure,AliasStructure_Direct_Nodes
+from Experiments.Experiment_Space import calculate_as_memory
 
 
 def leaf_sampling_alias(node):
@@ -27,7 +28,8 @@ def alias_sampling(canonical_nodes,times):
     for i in range(times):
         result_index = alias_structure.sample()
         results.append(canonical_nodes[result_index])
-    return results
+    memory_cost = calculate_as_memory(alias_structure) / (1024 * 1024 * 1024)
+    return results,memory_cost
 
 def alias_sampling_direct(canonical_nodes,times):
     probs = []
