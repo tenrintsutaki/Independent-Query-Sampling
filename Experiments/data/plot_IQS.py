@@ -2,8 +2,6 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 def plot_IQS_3lines(df,n,s):
-    # if (len(s) == 2):
-    #     s = s[0] + "." + s[1]
     # 自定义颜色和标签
     colors = ['red', 'blue', 'green']  # 数据点的颜色
     labels = ['Tree-Traverse', 'Alias-Optimization', 'Double-Alias']  # 数据点的标签
@@ -15,7 +13,7 @@ def plot_IQS_3lines(df,n,s):
 
     # 添加图例、标题和坐标轴标签
     plt.legend()
-    plt.title(f"Runtime N = {n}, s = {s}%")
+    plt.title(f"Runtime N = {n}, s = {s}")
     plt.xlabel("Selectivity")
     plt.ylabel("Runtime (s)")
 
@@ -41,7 +39,7 @@ def plot_IQS_2lines(df,n,s):
 
     # 添加图例、标题和坐标轴标签
     plt.legend()
-    plt.title(f"Runtime N = {n}, s = {s}%")
+    plt.title(f"Runtime N = {n}, s = {s}")
     plt.xlabel("Selectivity")
     plt.ylabel("Runtime (s)")
 
@@ -54,14 +52,10 @@ def plot_IQS_2lines(df,n,s):
 
 if __name__ == "__main__":
     # 读取 CSV 文件
-    file_name = 'N_1000000_s_1.csv'
+    file_name = 'N_1000000_s_1000_.csv'
     df = pd.read_csv(file_name)
     n = int(file_name.split("_")[1])
-    s = file_name.split("_")[-1][0:1]
-    if (s.startswith('0')):
-        pass
-    else:
-        s = int(s)
+    s = int(file_name.split("_")[-2])
     plot_IQS_2lines(df,n,s)
     plot_IQS_3lines(df,n,s)
 

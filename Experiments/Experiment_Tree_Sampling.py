@@ -77,85 +77,84 @@ if __name__ == '__main__':
 
     print(f"Memory Cost of Tree: {calculate_tree_memory(root) / (1024 * 1024 * 1024)} GB for nodes: {num_nodes}")
 
-    time_vals_canonical = []
-    time_vals_compare = []
-    time_vals_alias = []
-    time_vals_alias_alias = []
-    selectivity_vals = []
-    s = 1
-    k = int((s / 100) * num_nodes)
-    round = 10
-    extra_alias_memory = []
-    for i in range(1,100):# ratio from 1% to 9%
-        selectivity = random.random()
-        r_canonical = []
-        r_compare = 0
-        r_alias = []
-        r_alias_alias = []
-        for r in range(round):
-            r_canonical.append(calculate_time_tree_sampling(root, selectivity, num_nodes,k)) # calculate the running time
-            # r_compare += calculate_time_compare(root, i / 10, num_nodes,k)
-            r_alias.append(calculate_time_tree_alias(root, selectivity, num_nodes, k))
-            time_cost,memory = calculate_time_tree_alias_alias(root, selectivity, num_nodes, k)
-            r_alias_alias.append(time_cost)
-            extra_alias_memory.append(memory)
-        # print(f"Time taken to sample {r_compare / round} when selectivity is {i / 10} [compare]")
-        # print(f"Time taken to sample {r_canonical / round} when selectivity is {i / 10} [canonical]")
-        # print(f"Time taken to sample {r_alias / round} when selectivity is {i / 10} [alias]")
-        # print(f"Time taken to sample {r_alias_alias / round} when selectivity is {i / 10} [alias-alias]")
-        time_vals_canonical.append(r_canonical)
-        # time_vals_compare.append(r_compare / round)
-        time_vals_alias.append(r_alias)
-        time_vals_alias_alias.append(r_alias_alias)
-        selectivity_vals.append(selectivity)
-    # Count the node amount in the interval
+    for k in [10,20,50,100,200,500,1000]:
+        time_vals_canonical = []
+        time_vals_compare = []
+        time_vals_alias = []
+        time_vals_alias_alias = []
+        selectivity_vals = []
+        round = 10
+        extra_alias_memory = []
+        for i in range(1,100):# ratio from 1% to 9%
+            selectivity = random.random()
+            r_canonical = []
+            r_compare = 0
+            r_alias = []
+            r_alias_alias = []
+            for r in range(round):
+                r_canonical.append(calculate_time_tree_sampling(root, selectivity, num_nodes,k)) # calculate the running time
+                # r_compare += calculate_time_compare(root, i / 10, num_nodes,k)
+                r_alias.append(calculate_time_tree_alias(root, selectivity, num_nodes, k))
+                time_cost,memory = calculate_time_tree_alias_alias(root, selectivity, num_nodes, k)
+                r_alias_alias.append(time_cost)
+                extra_alias_memory.append(memory)
+            # print(f"Time taken to sample {r_compare / round} when selectivity is {i / 10} [compare]")
+            # print(f"Time taken to sample {r_canonical / round} when selectivity is {i / 10} [canonical]")
+            # print(f"Time taken to sample {r_alias / round} when selectivity is {i / 10} [alias]")
+            # print(f"Time taken to sample {r_alias_alias / round} when selectivity is {i / 10} [alias-alias]")
+            time_vals_canonical.append(r_canonical)
+            # time_vals_compare.append(r_compare / round)
+            time_vals_alias.append(r_alias)
+            time_vals_alias_alias.append(r_alias_alias)
+            selectivity_vals.append(selectivity)
+        # Count the node amount in the interval
 
-    import numpy as np
-    import matplotlib.pyplot as plt
-    avg_memory = sum(extra_alias_memory) / len(extra_alias_memory)
-    print(f"Memory Cost of Tree: {calculate_tree_memory(root) / (1024 * 1024 * 1024) + avg_memory} GB for nodes: {num_nodes}")
-    # Generate some sample data
-    # fig1, ax1 = plt.subplots()
-    # ax1.plot(selectivity_vals, time_vals_compare, label='Compare')
-    # ax1.plot(selectivity_vals, time_vals_alias, label='Alias')
-    # ax1.set_ylabel('Time')
-    # ax1.plot(selectivity_vals, time_vals_canonical, label='Canonical')
-    # ax1.set_xlabel('Selectivity')
-    # ax1.legend()
-    # plt.title(f'Nodes: {num_nodes}, Memory Cost: {memory_info.rss / (1024 * 1024 * 1024):.2f} GB, S = {k}')
-    # plt.show()
-    # 展开 y 列表，同时复制相应的 x 值
+        import numpy as np
+        import matplotlib.pyplot as plt
+        avg_memory = sum(extra_alias_memory) / len(extra_alias_memory)
+        print(f"Memory Cost of Tree: {calculate_tree_memory(root) / (1024 * 1024 * 1024) + avg_memory} GB for nodes: {num_nodes}")
+        # Generate some sample data
+        # fig1, ax1 = plt.subplots()
+        # ax1.plot(selectivity_vals, time_vals_compare, label='Compare')
+        # ax1.plot(selectivity_vals, time_vals_alias, label='Alias')
+        # ax1.set_ylabel('Time')
+        # ax1.plot(selectivity_vals, time_vals_canonical, label='Canonical')
+        # ax1.set_xlabel('Selectivity')
+        # ax1.legend()
+        # plt.title(f'Nodes: {num_nodes}, Memory Cost: {memory_info.rss / (1024 * 1024 * 1024):.2f} GB, S = {k}')
+        # plt.show()
+        # 展开 y 列表，同时复制相应的 x 值
 
-    x_values = []
-    y_values = []
-    y1_values = []
-    y2_values = []
+        x_values = []
+        y_values = []
+        y1_values = []
+        y2_values = []
 
-    for i, yi in enumerate(time_vals_canonical):
-        # 对于 y 中的每个子列表 yi，复制 x[i] 并与 yi 中的每个值配对
-        x_values.extend([selectivity_vals[i]] * len(yi))
-        y_values.extend(yi)
+        for i, yi in enumerate(time_vals_canonical):
+            # 对于 y 中的每个子列表 yi，复制 x[i] 并与 yi 中的每个值配对
+            x_values.extend([selectivity_vals[i]] * len(yi))
+            y_values.extend(yi)
 
-    for i, yi in enumerate(time_vals_alias):
-        # 对于 y 中的每个子列表 yi，复制 x[i] 并与 yi 中的每个值配对
-        y1_values.extend(yi)
+        for i, yi in enumerate(time_vals_alias):
+            # 对于 y 中的每个子列表 yi，复制 x[i] 并与 yi 中的每个值配对
+            y1_values.extend(yi)
 
-    for i, yi in enumerate(time_vals_alias_alias):
-        # 对于 y 中的每个子列表 yi，复制 x[i] 并与 yi 中的每个值配对
-        y2_values.extend(yi)
+        for i, yi in enumerate(time_vals_alias_alias):
+            # 对于 y 中的每个子列表 yi，复制 x[i] 并与 yi 中的每个值配对
+            y2_values.extend(yi)
 
-    data = {
-        'Selectivity': x_values,
-        'Tree_Traverse': y_values,
-        'Alias': y1_values,
-        'Double-Alias': y2_values
-    }
+        data = {
+            'Selectivity': x_values,
+            'Tree_Traverse': y_values,
+            'Alias': y1_values,
+            'Double-Alias': y2_values
+        }
 
-    # 创建DataFrame
-    df = pd.DataFrame(data)
+        # 创建DataFrame
+        df = pd.DataFrame(data)
 
-    # 保存为CSV文件
-    df.to_csv(f'data/N_{num_nodes}_s_{s}.csv', index=False)
+        # 保存为CSV文件
+        df.to_csv(f'data/N_{num_nodes}_s_{k}_.csv', index=False)
 
     #
     # plt.figure(figsize=(5, 8))
