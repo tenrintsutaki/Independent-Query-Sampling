@@ -10,7 +10,7 @@ def build_chunk(val_list,weight_list,chunk_size):
     if len(val_list) != len(weight_list):
         raise ValueError("Length of val_list and weight_list must be same")
     if len(val_list) % chunk_size == 0:
-        for i in range(0,len(val_list) - chunk_size,chunk_size):
+        for i in range(0,len(val_list),chunk_size):
             chunk = Chunk_Structure(raw = val_list[i:i+chunk_size],weight = sum(weight_list[i:i+chunk_size]))
             chunk.initialize()
             as_structure = AliasStructure(probs = weight_list[i:i+chunk_size]) # Create AS
