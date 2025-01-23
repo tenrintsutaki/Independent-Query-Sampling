@@ -8,7 +8,7 @@ from Sampling import *
 from Sample_Tools import update_internal_nodes,traverse_path,calculate_weight,find_leaves,calculate_height
 from Tree_Sampling.Construction_Tools import calculate_leaf_numbers
 from builder import build_chunk
-
+from Sampling_Alias import leaf_sampling_alias
 
 def plot_tree(node, canonical, x=0, y=0, layer=1, dx=1):
     if node is not None:
@@ -44,11 +44,14 @@ def visualize_tree(root,canonical):
 
 if __name__ == '__main__':
     times_dict = defaultdict(int)
-    val_list = [x for x in range(1,33)]
-    weight_list = [random.randint(1,100) for _ in range(1,33)]
+    leaf_count = 200
+    chunk_size = 25
+    k = 100
+    val_list = [x for x in range(1,leaf_count+1)]
+    weight_list = [random.randint(1,100) for _ in range(1,leaf_count+1)]
     for i in range(len(weight_list)):
         weight_list[i] = weight_list[i] / sum(weight_list)
-    chunk_list = build_chunk(val_list,weight_list,4)
+    chunk_list = build_chunk(val_list,weight_list,chunk_size)
 
     root = TreeNode()
     root.left = TreeNode()
@@ -67,25 +70,11 @@ if __name__ == '__main__':
     root.right.right.right = chunk_list[7]
     calculate_weight(root)
     update_internal_nodes(root)
-    canonical,weights = find_paths_and_collect(root,1,24)
+    canonical,weights = find_paths_and_collect(root,1,125)
     print(canonical)
-    visualize_tree(root,canonical)
-
+    # visualize_tree(root,canonical)
 
     basic_sampling_preprocess(canonical,weights)
-    update_intervals(root)
-    sampled_nodes = basic_sampling(canonical,1000)
-    for node in sampled_nodes:
-        times_dict[leaf_sampling(node).val] += 1
-    for key,value in times_dict.items():
-        print(f"{key} index sampled {value} times")
-    print(calculate_leaf_numbers(canonical))
-    print(root.interval)
-
-    compare_list = comparable_sampling(root,4,9)
-    for node in compare_list:
-        print("Compare path:",node.val)
-    res = find_leaves(root)
-    for node in res:
-        print("Leaves:",node.val)
-    print(f"height: {calculate_height(root)}")
+    result = basic_sampling(canonical, k) # Sample a canonical node firstly using basic sample
+    for node in result:
+        leaf_sampling_alias(node) # Then use alias sampling to get the result
