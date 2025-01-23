@@ -13,4 +13,6 @@ class Chunk_Structure():
     def initialize(self):
         self.l_val = self.raw[0]
         self.r_val = self.raw[-1]
-        
+
+    def is_leaf(self):
+        return True

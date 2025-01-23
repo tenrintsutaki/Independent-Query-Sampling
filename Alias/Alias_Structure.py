@@ -32,6 +32,7 @@ class AliasStructure():
         # if(sum(probs) != 1.0):
         #     raise RuntimeError(f"Probabilities must sum to 1.0, but now is {sum(probs)}")
         self.probs = probs
+        self.elements = None
         self.UrnSet = []
         self.avg = 1/len(self.probs)
         self.e1List = []
@@ -79,10 +80,21 @@ class AliasStructure():
 
     def sample(self):
         # Choose an urn first
+        if len(self.UrnSet) == 0:
+            raise Exception("The Urnset is empty")
         index = random.random() * len(self.UrnSet) # Create a repeatable index
         floor = math.floor(index)
         urn = self.UrnSet[floor] # Choose the urn
         return urn.sample(index - floor)
+
+    def sample_element(self):
+        # Choose an urn first
+        if len(self.UrnSet) == 0:
+            raise Exception("The Urnset is empty")
+        index = random.random() * len(self.UrnSet) # Create a repeatable index
+        floor = math.floor(index)
+        urn = self.UrnSet[floor] # Choose the urn
+        return self.elements[urn.sample(index - floor)]
 
 class AliasStructure_List():
     # Alias Structure Class

@@ -14,6 +14,8 @@ def build_chunk(val_list,weight_list,chunk_size):
             chunk = Chunk_Structure(raw = val_list[i:i+chunk_size],weight = sum(weight_list[i:i+chunk_size]))
             chunk.initialize()
             as_structure = AliasStructure(probs = weight_list[i:i+chunk_size]) # Create AS
+            as_structure.elements = val_list[i:i+chunk_size]
+            as_structure.initialize()
             chunk.AS = as_structure # Bind AS
             chunk_list.append(chunk)
     else: # Problem 1

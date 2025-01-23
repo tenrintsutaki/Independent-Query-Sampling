@@ -1,5 +1,4 @@
 import random
-
 from Alias.Alias_Structure import AliasStructure,AliasStructure_Direct_Nodes
 from Experiments.Experiment_Space import calculate_as_memory
 
@@ -8,7 +7,7 @@ def leaf_sampling_alias(node):
     if node.is_leaf():
         return node
     else:
-        return node.AS.sample()
+        return node.AS.sample_element()
 
 def leaf_sampling_alias_application(node):
     if node.is_leaf():

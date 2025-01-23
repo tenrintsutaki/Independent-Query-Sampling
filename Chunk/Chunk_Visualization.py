@@ -9,7 +9,9 @@ from Sample_Tools import update_internal_nodes,traverse_path,calculate_weight,fi
 from Tree_Sampling.Construction_Tools import calculate_leaf_numbers
 from builder import build_chunk
 from Sampling_Alias import leaf_sampling_alias
+from Construction_Tools import build_AS_structure
 
+#TODO: 之前的sample没有获取到Value元素
 def plot_tree(node, canonical, x=0, y=0, layer=1, dx=1):
     if node is not None:
         # 在当前节点位置绘制节点值
@@ -44,8 +46,10 @@ def visualize_tree(root,canonical):
 
 if __name__ == '__main__':
     times_dict = defaultdict(int)
-    leaf_count = 200
-    chunk_size = 25
+    leaf_count = 80
+    chunk_size = 10
+    x = 1
+    y = 40
     k = 100
     val_list = [x for x in range(1,leaf_count+1)]
     weight_list = [random.randint(1,100) for _ in range(1,leaf_count+1)]
@@ -70,11 +74,13 @@ if __name__ == '__main__':
     root.right.right.right = chunk_list[7]
     calculate_weight(root)
     update_internal_nodes(root)
-    canonical,weights = find_paths_and_collect(root,1,125)
+    canonical,weights = find_paths_and_collect(root,x,y)
     print(canonical)
-    # visualize_tree(root,canonical)
+    visualize_tree(root,canonical)
 
     basic_sampling_preprocess(canonical,weights)
+    build_AS_structure(root)  # BUILD AS
     result = basic_sampling(canonical, k) # Sample a canonical node firstly using basic sample
     for node in result:
-        leaf_sampling_alias(node) # Then use alias sampling to get the result
+        sampled_chunk = leaf_sampling_alias(node) # Then use alias sampling to get the result\
+        print(sampled_chunk.AS.sample())
