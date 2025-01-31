@@ -83,4 +83,5 @@ if __name__ == '__main__':
     result = basic_sampling(canonical, k) # Sample a canonical node firstly using basic sample
     for node in result:
         sampled_chunk = leaf_sampling_alias(node) # Then use alias sampling to get the result\
-        print(sampled_chunk.AS.sample())
+        res = sampled_chunk.AS.sample_element()
+        print(res)

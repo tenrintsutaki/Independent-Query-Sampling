@@ -82,9 +82,10 @@ def build_AS_structure(root):
     for i in range(0,len(probs)): # Can be low efficient, need to be modified
         probs[i] /= s
     alias_structure = AliasStructure(probs)
+    alias_structure.elements = leaves # Add leaves to elements 存叶子
     root.AS = alias_structure
     root.AS.initialize()
-    root.leaves = leaves
+    # root.leaves = leaves
     build_AS_structure(root.left)
     build_AS_structure(root.right)
 
