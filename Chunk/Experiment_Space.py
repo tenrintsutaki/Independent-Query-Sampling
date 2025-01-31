@@ -57,8 +57,7 @@ def calculate_as_memory(AS):
         total_memory +=  sys.getsizeof(e)
 
     total_memory += sys.getsizeof(AS.elements)
-    if AS.elements:
-        for e in AS.elements:
-            total_memory += sys.getsizeof(e)
+    for e in AS.elements:
+        total_memory += sys.getsizeof(e)
 
     return total_memory
