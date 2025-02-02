@@ -25,20 +25,19 @@ def random_tree_assigned(n):
     ls.sort()
     return ls
 
-def construct_bst(sorted_array, weights, leaf_index = 0):
-    if not sorted_array:
+def construct_bst(chunk_list, weights, leaf_index = 0):
+    if not chunk_list:
         return None, leaf_index
 
-    if len(sorted_array) == 1: # For leaf nodes
-        weight = weights[leaf_index]
-        leaf_index = leaf_index + 1
-        return TreeNode(val = sorted_array[0], weight = weight), leaf_index
+    if len(chunk_list) == 1: # For leaf nodes
+        return chunk_list[0], leaf_index + 1
 
-    mid = len(sorted_array) // 2
-    left_child,leaf_index  = construct_bst(sorted_array[:mid], weights, leaf_index)
-    right_child,leaf_index = construct_bst(sorted_array[mid:], weights, leaf_index)
+    mid = len(chunk_list) // 2
+    left_child,leaf_index  = construct_bst(chunk_list[:mid], weights, leaf_index)
+    right_child,leaf_index = construct_bst(chunk_list[mid:], weights, leaf_index)
     root = TreeNode()
-    root.val = find_min_in_right_subtree(right_child)
+    root.l_val = find_min_in_right_subtree(right_child,"l")
+    root.r_val = find_min_in_right_subtree(right_child, "r")
     root.left = left_child
     root.right = right_child
     return root,leaf_index

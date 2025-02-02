@@ -70,7 +70,7 @@ if __name__ == '__main__':
     memory_info = process.memory_info()
     memory_cost_before_tree = memory_info.rss
 
-    root,leaf_index = construct_bst(random_list, weights, 0) # 写一下
+    root,leaf_index = construct_bst(chunk_list, weights) # 写一下
     calculate_weight(root)
     update_internal_nodes(root)
     # update_intervals(root)
