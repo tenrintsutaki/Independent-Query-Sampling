@@ -118,7 +118,7 @@ def generate_random_weights(num):
     random_weights = np.random.rand(num)
     total_weight = np.sum(random_weights)
     normalized_weights = random_weights / total_weight
-    return normalized_weights
+    return list(normalized_weights)
 
 def calculate_leaf_numbers(nodes):
     """ find how many leaf nodes in these input {nodes} """

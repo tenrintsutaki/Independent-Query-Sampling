@@ -10,6 +10,8 @@ from Tree_Sampling.Construction_Tools import calculate_leaf_numbers
 from builder import build_chunk
 from Sampling_Alias import leaf_sampling_alias
 from Construction_Tools import build_AS_structure
+from pympler import asizeof
+from Experiment_Space import *
 
 #TODO: 之前的sample没有获取到Value元素
 def plot_tree(node, canonical, x=0, y=0, layer=1, dx=1):
@@ -85,3 +87,6 @@ if __name__ == '__main__':
         sampled_chunk = leaf_sampling_alias(node) # Then use alias sampling to get the result\
         res = sampled_chunk.AS.sample_element()
         print(res)
+    c = chunk_list[0]
+    print(f"Measure by asizeof: {asizeof.asizeof(c.AS)}")
+    print(f"Measure by Tenrin: {calculate_as_memory(c.AS)}")

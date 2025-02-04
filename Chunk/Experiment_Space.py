@@ -1,10 +1,22 @@
 import sys
+from Chunk.builder import build_chunk
+from Chunk.chunk_structure import Chunk_Structure
+from Construction_Tools import *
+from Sample_Tools import calculate_weight, update_internal_nodes
+from Sampling import find_canonical_nodes_new, basic_sampling, leaf_sampling, find_canonical_nodes, \
+    comparable_sampling, \
+    find_paths_and_collect, basic_sampling_preprocess, update_intervals
+
+from Sampling_Alias import leaf_sampling_alias, alias_sampling, alias_sampling_direct
+from Experiments.Exp_Generator import generate_random_interval
+from pympler import asizeof
+
 
 def calculate_tree_memory(node):
     if node is None:
         return 0
 
-    if node.is_leaf(): # For the chunks
+    if isinstance(node,Chunk_Structure): # For the chunks
         return calculate_chunk_memory(node)
 
     # Memory for the current node object itself
@@ -64,8 +76,10 @@ def calculate_as_memory(AS):
     for e in AS.elements:
         if (isinstance(e, int)): # When the element in the AS is int
             total_memory += sys.getsizeof(e)
-        else: # Else, they are chunks
+        elif (isinstance(e, Chunk_Structure)): # Else, they are chunks
             total_memory += calculate_chunk_memory(e)
+        else:
+            raise Exception("Wrong Type in AS Elements")
     return total_memory
 
 def calculate_chunk_memory(chunk):
@@ -82,3 +96,31 @@ def calculate_chunk_memory(chunk):
         total_memory += sys.getsizeof(e)
     total_memory += calculate_as_memory(chunk.AS)
     return total_memory
+
+def build_test_tree(num_nodes,chunk_size):
+    random_list = random_tree_assigned(num_nodes)
+    weights = generate_random_weights(num_nodes)
+    chunk_list = build_chunk(random_list, weights, chunk_size)
+    root, leaf_index = construct_bst(chunk_list, weights)  # 写一下
+    calculate_weight(root)
+    update_internal_nodes(root)
+    build_AS_structure(root)  # BUILD AS
+    res = asizeof.asizeof(root)/ (1024 * 1024 * 1024)
+    print(f"Measured by asizeof:{res} with {num_nodes} nodes")  # 输出字节数
+    return res
+
+if __name__ == '__main__':
+    result = []
+
+    num_nodes = [i for i in range(0,4000000 + 1,250000)]
+
+    chunk_size = 500
+
+    for n in num_nodes:
+        result.append(build_test_tree(n,chunk_size))
+
+    with open(f'../Result/chunk_result_{chunk_size}.txt', 'w') as file:
+        i = 0
+        for item in result:
+            file.write(f"{num_nodes[i]},{item}\n")  # 每个元素写入一行
+            i += 1

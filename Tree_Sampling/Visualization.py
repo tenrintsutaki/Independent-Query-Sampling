@@ -2,6 +2,9 @@
 from collections import defaultdict
 
 from matplotlib import pyplot as plt
+
+from Experiments.Experiment_Space import calculate_tree_memory
+from pympler import asizeof
 from TreeNode import TreeNode
 from Sampling import *
 from Sample_Tools import update_internal_nodes,traverse_path,calculate_weight,find_leaves,calculate_height
@@ -68,20 +71,24 @@ if __name__ == '__main__':
     canonical,weights = find_paths_and_collect(root,1,8)
     print(canonical)
     visualize_tree(root,canonical)
-    basic_sampling_preprocess(canonical,weights)
-    update_intervals(root)
-    sampled_nodes = basic_sampling(canonical,1000)
-    for node in sampled_nodes:
-        times_dict[leaf_sampling(node).val] += 1
-    for key,value in times_dict.items():
-        print(f"{key} index sampled {value} times")
-    print(calculate_leaf_numbers(canonical))
-    print(root.interval)
 
-    compare_list = comparable_sampling(root,4,9)
-    for node in compare_list:
-        print("Compare path:",node.val)
-    res = find_leaves(root)
-    for node in res:
-        print("Leaves:",node.val)
-    print(f"height: {calculate_height(root)}")
+    print(f"Measure by asizeof: {asizeof.asizeof(root)}")
+    print(f"Measure by Tenrin: {calculate_tree_memory(root)}")
+
+    # basic_sampling_preprocess(canonical,weights)
+    # update_intervals(root)
+    # sampled_nodes = basic_sampling(canonical,1000)
+    # for node in sampled_nodes:
+    #     times_dict[leaf_sampling(node).val] += 1
+    # for key,value in times_dict.items():
+    #     print(f"{key} index sampled {value} times")
+    # print(calculate_leaf_numbers(canonical))
+    # print(root.interval)
+    #
+    # compare_list = comparable_sampling(root,4,9)
+    # for node in compare_list:
+    #     print("Compare path:",node.val)
+    # res = find_leaves(root)
+    # for node in res:
+    #     print("Leaves:",node.val)
+    # print(f"height: {calculate_height(root)}")

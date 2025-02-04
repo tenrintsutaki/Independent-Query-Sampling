@@ -9,6 +9,7 @@ from Tree_Sampling.TreeNode import TreeNode
 from Tree_Sampling.Sampling_Alias import leaf_sampling_alias, alias_sampling, alias_sampling_direct
 from Experiments.Exp_Generator import generate_random_interval
 from Experiment_Space import calculate_tree_memory
+from pympler import asizeof
 
 
 def calculate_time_tree_sampling(root, selectivity, total_length,k):
@@ -73,7 +74,7 @@ if __name__ == '__main__':
     # build_AS_structure_direct_node(root)
     build_AS_structure(root) #BUILD AS
 
-    print(f"Memory Cost of Tree: {calculate_tree_memory(root) / (1024 * 1024 * 1024)} GB for nodes: {num_nodes}")
+    print(f"Memory Cost of Tree (using asizeof): {asizeof.asizeof(root) / (1024 * 1024 * 1024)} GB for nodes: {num_nodes}")
 
     for k in [10,20,50,100,200,500,1000]:
         time_vals_canonical = []
