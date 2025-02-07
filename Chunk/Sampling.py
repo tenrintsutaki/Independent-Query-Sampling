@@ -145,6 +145,8 @@ def collect_nodes(root, path_x, path_y):
 
 
 def find_paths_and_collect(root, x, y):
+    l_align = True
+    r_align = True
     path_x = find_path(root, x, 'l')
     path_y = find_path(root, y, 'r')
 
@@ -160,7 +162,11 @@ def find_paths_and_collect(root, x, y):
     # 收集节点
     collected_nodes,sum_weights = collect_nodes(root, path_x, path_y)
     # print(f"collected: ",collected_nodes)
-    return collected_nodes,sum_weights
+    if (collected_nodes[-2].l_val != x):
+        l_align = False
+    if (collected_nodes[-1].r_val != y):
+        r_align = False
+    return collected_nodes,sum_weights,l_align,r_align
 
 def find_min_leaf(root):
     """ 找到以 root 为根的树的最小叶子节点的值 """

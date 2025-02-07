@@ -7,20 +7,24 @@ from TreeNode import TreeNode
 from Sampling import *
 from Sample_Tools import update_internal_nodes,traverse_path,calculate_weight,find_leaves,calculate_height
 from Tree_Sampling.Construction_Tools import calculate_leaf_numbers
-from builder import build_chunk
+from builder import build_chunk, replace_non_align_chunk
 from Sampling_Alias import leaf_sampling_alias
 from Construction_Tools import build_AS_structure
 from pympler import asizeof
 from Experiment_Space import *
 
 #TODO: 之前的sample没有获取到Value元素
-def plot_tree(node, canonical, x=0, y=0, layer=1, dx=1):
+def plot_tree(node, canonical, left, right, x=0, y=0, layer=1, dx=1):
     if node is not None:
         # 在当前节点位置绘制节点值
         if node in canonical:
             color = "orange"
         else:
             color = "skyblue"
+        if not left and node == canonical[-2]:
+            color = "red"
+        if not right and node == canonical[-1]:
+            color = "red"
         plt.text(x, y, str(str(node.l_val) + "," + str(node.r_val)), ha='center', va='center', fontsize=12,
                  bbox=dict(facecolor=color, edgecolor='black', boxstyle='circle,pad=0.5'))
         # plt.text(x + 0.3, y, "w=" + str(node.weight), ha='center', va='center', fontsize=12)
@@ -30,20 +34,20 @@ def plot_tree(node, canonical, x=0, y=0, layer=1, dx=1):
             new_x = x - dx / layer
             new_y = y - 1
             plt.plot([x, new_x], [y, new_y], 'k-')
-            plot_tree(node.left, canonical, new_x, new_y, layer + 1, dx)
+            plot_tree(node.left, canonical, left, right, new_x, new_y, layer + 1, dx)
 
         # 如果有右子节点，计算右子节点的位置并绘制线条和递归调用
         if node.right:
             new_x = x + dx / layer
             new_y = y - 1
             plt.plot([x, new_x], [y, new_y], 'k-')
-            plot_tree(node.right, canonical, new_x, new_y, layer + 1, dx)
+            plot_tree(node.right, canonical, left, right, new_x, new_y, layer + 1, dx)
 
 # 主函数，初始化二叉树并可视化
-def visualize_tree(root,canonical):
+def visualize_tree(root,canonical,l_align,r_align):
     plt.figure(figsize=(10, 6))
     plt.axis('off')
-    plot_tree(root,canonical)
+    plot_tree(root,canonical,l_align,r_align)
     plt.show()
 
 if __name__ == '__main__':
@@ -51,7 +55,7 @@ if __name__ == '__main__':
     leaf_count = 80
     chunk_size = 10
     x = 1
-    y = 40
+    y = 55
     k = 100
     val_list = [x for x in range(1,leaf_count+1)]
     weight_list = [random.randint(1,100) for _ in range(1,leaf_count+1)]
@@ -76,13 +80,18 @@ if __name__ == '__main__':
     root.right.right.right = chunk_list[7]
     calculate_weight(root)
     update_internal_nodes(root)
-    canonical,weights = find_paths_and_collect(root,x,y)
-    print(canonical)
-    visualize_tree(root,canonical)
+    canonical,weights,l_align,r_align = find_paths_and_collect(root,x,y)
+    print(l_align)
+    print(r_align)
+    visualize_tree(root,canonical,l_align,r_align)
 
+    #把末尾两个canonical变化一下
+    # [-1]为最后一个chunk, [-2]为第一个chunk
+    canonical = replace_non_align_chunk(canonical,l_align,r_align,x,y)
     basic_sampling_preprocess(canonical,weights)
     build_AS_structure(root)  # BUILD AS
     result = basic_sampling(canonical, k) # Sample a canonical node firstly using basic sample
+    set_result = set(result)
     for node in result:
         sampled_chunk = leaf_sampling_alias(node) # Then use alias sampling to get the result\
         res = sampled_chunk.AS.sample_element()
