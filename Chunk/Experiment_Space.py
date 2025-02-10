@@ -114,7 +114,7 @@ if __name__ == '__main__':
 
     num_nodes = [i for i in range(0,4000000 + 1,250000)]
 
-    chunk_size = 500
+    chunk_size = 1000
 
     for n in num_nodes:
         result.append(build_test_tree(n,chunk_size))
