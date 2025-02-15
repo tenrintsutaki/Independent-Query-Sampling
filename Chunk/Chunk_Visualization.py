@@ -55,7 +55,7 @@ if __name__ == '__main__':
     leaf_count = 80
     chunk_size = 10
     x = 1
-    y = 55
+    y = 60
     k = 100
     val_list = [x for x in range(1,leaf_count+1)]
     weight_list = [random.randint(1,100) for _ in range(1,leaf_count+1)]
