@@ -9,6 +9,7 @@ from TreeNode import TreeNode
 from Sampling import *
 from Sample_Tools import update_internal_nodes,traverse_path,calculate_weight,find_leaves,calculate_height
 from Tree_Sampling.Construction_Tools import calculate_leaf_numbers
+from Validation.Result_Tester import Tester
 
 
 def plot_tree(node, canonical, x=0, y=0, layer=1, dx=1):
@@ -67,21 +68,24 @@ if __name__ == '__main__':
     # for node in path:
     #     print(node.val, node.weight)
     # 可视化二叉树
-
-    canonical,weights = find_paths_and_collect(root,1,8)
+    tester = Tester([1,4,7,8,9,11,12,13],[0.1,0.1,0.15,0.15,0.1,0.1,0.15,0.15],0.1)
+    canonical,weights = find_paths_and_collect(root,1,13)
     print(canonical)
     visualize_tree(root,canonical)
 
     print(f"Measure by asizeof: {asizeof.asizeof(root)}")
     print(f"Measure by Tenrin: {calculate_tree_memory(root)}")
 
-    # basic_sampling_preprocess(canonical,weights)
-    # update_intervals(root)
-    # sampled_nodes = basic_sampling(canonical,1000)
-    # for node in sampled_nodes:
-    #     times_dict[leaf_sampling(node).val] += 1
-    # for key,value in times_dict.items():
-    #     print(f"{key} index sampled {value} times")
+    basic_sampling_preprocess(canonical,weights)
+    update_intervals(root)
+    sampled_nodes = basic_sampling(canonical,10000)
+    for node in sampled_nodes:
+        res = leaf_sampling(node).val
+        times_dict[res] += 1
+        tester.add_record(res)
+    for key,value in times_dict.items():
+        print(f"{key} index sampled {value} times")
+    tester.valid()
     # print(calculate_leaf_numbers(canonical))
     # print(root.interval)
     #

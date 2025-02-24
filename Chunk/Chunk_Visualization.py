@@ -7,6 +7,7 @@ from TreeNode import TreeNode
 from Sampling import *
 from Sample_Tools import update_internal_nodes,traverse_path,calculate_weight,find_leaves,calculate_height
 from Tree_Sampling.Construction_Tools import calculate_leaf_numbers
+from Validation.Result_Tester import Tester
 from builder import build_chunk, replace_non_align_chunk
 from Sampling_Alias import leaf_sampling_alias
 from Construction_Tools import build_AS_structure
@@ -56,12 +57,14 @@ if __name__ == '__main__':
     chunk_size = 10
     x = 1
     y = 60
-    k = 100
+    k = 10000
+
     val_list = [x for x in range(1,leaf_count+1)]
     weight_list = [random.randint(1,100) for _ in range(1,leaf_count+1)]
     for i in range(len(weight_list)):
         weight_list[i] = weight_list[i] / sum(weight_list)
     chunk_list = build_chunk(val_list,weight_list,chunk_size)
+    tester = Tester(val_list,weight_list,0.1)
 
     root = TreeNode()
     root.left = TreeNode()
@@ -83,7 +86,7 @@ if __name__ == '__main__':
     canonical,weights,l_align,r_align = find_paths_and_collect(root,x,y)
     print(l_align)
     print(r_align)
-    visualize_tree(root,canonical,l_align,r_align)
+    # visualize_tree(root,canonical,l_align,r_align)
 
     #把末尾两个canonical变化一下
     # [-1]为最后一个chunk, [-2]为第一个chunk
@@ -95,7 +98,9 @@ if __name__ == '__main__':
     for node in result:
         sampled_chunk = leaf_sampling_alias(node) # Then use alias sampling to get the result\
         res = sampled_chunk.AS.sample_element()
+        tester.add_record(res)
         print(res)
     c = chunk_list[0]
     print(f"Measure by asizeof: {asizeof.asizeof(c.AS)}")
     print(f"Measure by Tenrin: {calculate_as_memory(c.AS)}")
+    tester.valid()

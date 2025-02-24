@@ -20,7 +20,6 @@ class Tester():
         print(f"The Validation Result is: {self.counter / len(self.keys)}")
         return self.counter / len(self.keys)
 
-
 if __name__ == "__main__":
     l1 = [1,2,3,4,5]
     l2 = [0.05,0.3,0.5,0.1,0.05]
