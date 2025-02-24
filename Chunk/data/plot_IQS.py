@@ -57,11 +57,33 @@ def plot_IQS_4lines(df_chunk,df_normal,n,s):
 
     # 绘制散点图
     plt.figure(figsize=(8, 6))
-    for i, col in enumerate(df_chunk.columns[1:]):  # 遍历第二列到第四列
-        plt.scatter(df_chunk[df_chunk.columns[0]], df_chunk[col], color=colors[i], label=labels[i + 2], alpha=0.5, s = 20)
+    for i, col in enumerate(df_chunk.columns[1:2]):  # 遍历第二列到第四列
+        plt.scatter(df_chunk[df_chunk.columns[0]], df_chunk[col], color='blue', label=labels[0], alpha=0.7, s = 20)
 
-    for i, col in enumerate(df_normal.columns[2:]):  # 遍历第二列到第四列
-        plt.scatter(df_normal[df_normal.columns[0]], df_normal[col], color=colors[i + 2], label=labels[i], alpha=0.5, s = 20)
+    for i, col in enumerate(df_normal.columns[2:3]):  # 遍历第二列到第四列
+        plt.scatter(df_normal[df_normal.columns[0]], df_normal[col], color='green', label=labels[2], alpha=0.7, s = 20)
+
+    # 添加图例、标题和坐标轴标签
+    plt.legend()
+    plt.title(f"Runtime N = {n}, s = {s}")
+    plt.xlabel("Selectivity")
+    plt.ylabel("Runtime (s)")
+
+    # 显示网格
+    plt.grid(True, linestyle='--', alpha=0.7)
+
+    # 显示图形
+    plt.savefig(f"images/N_{n}_s_{s}_2lines.png", dpi=300, bbox_inches="tight")  # 保存为 PNG 文件
+    plt.show()
+
+    # 绘制散点图
+    plt.figure(figsize=(8, 6))
+    for i, col in enumerate(df_chunk.columns[2:3]):  # 遍历第二列到第四列
+        plt.scatter(df_chunk[df_chunk.columns[0]], df_chunk[col], color='blue', label=labels[1], alpha=0.7, s=20)
+
+    for i, col in enumerate(df_normal.columns[3:4]):  # 遍历第二列到第四列
+        plt.scatter(df_normal[df_normal.columns[0]], df_normal[col], color='green', label=labels[3], alpha=0.7,
+                    s=20)
 
     # 添加图例、标题和坐标轴标签
     plt.legend()

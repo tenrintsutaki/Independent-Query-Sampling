@@ -18,12 +18,12 @@ x_a, y_a = read_file('chunk_result_100.txt')
 x_b, y_b = read_file('normal_result.txt')
 plt.figure(figsize=(10,5))
 # 绘制折线图
-plt.plot(x_a, y_a, label='Chunk', marker='o')
-plt.plot(x_b, y_b, label='Normal', marker='s')
+plt.plot(x_a, y_a, label='Chunk', marker='o',color = 'orange')
+plt.plot(x_b, y_b, label='Normal', marker='s',color = 'blue')
 
 
 # 添加标题和标签
-plt.title('Memory Comparison of Chunk and Normal')
+plt.title('Memory Comparison of Chunk and Normal Structure')
 plt.xlabel('Data Set Size')
 plt.ylabel('Memory Overhead (GB)')
 plt.grid(True)
