@@ -69,7 +69,7 @@ if __name__ == '__main__':
     #     print(node.val, node.weight)
     # 可视化二叉树
     tester = Tester([1,4,7,8,9,11,12,13],[0.1,0.1,0.15,0.15,0.1,0.1,0.15,0.15],0.1)
-    canonical,weights = find_paths_and_collect(root,1,13)
+    canonical,weights = find_paths_and_collect(root,1,8)
     print(canonical)
     visualize_tree(root,canonical)
 

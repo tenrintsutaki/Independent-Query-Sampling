@@ -25,11 +25,11 @@ class Tester():
         for k,v in self.time_dict.items():
             # 一次没有被采样的k定义为out of the range.
             if v == 0:
-                self.sample_weights[self.weights.index(k)] = 0
+                self.sample_weights[self.keys.index(k)] = 0
                 # 使得sample weight里面这个k的位置的权重归0
+        origin_sum = sum(self.sample_weights)
         for i in range(len(self.sample_weights)):
-            print(self.sample_weights[i])
-            self.sample_weights[i] = self.sample_weights[i] / sum(self.sample_weights[i])
+            self.sample_weights[i] = self.sample_weights[i] / origin_sum
             # 权重逐个归一化
 
 

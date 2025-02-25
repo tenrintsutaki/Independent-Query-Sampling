@@ -64,7 +64,6 @@ def calculate_time_compare(root, selectivity, total_length,k):
 
 if __name__ == '__main__':
     # Test Methods of the Construction
-
     num_nodes = 10000
     chunk_size = 100
     random_list = random_tree_assigned(num_nodes)
@@ -74,7 +73,7 @@ if __name__ == '__main__':
     calculate_weight(root)
     update_internal_nodes(root)
     build_AS_structure(root) #BUILD AS
-    t = Tester(random_list, weights,0.3)
+    t = Tester(random_list, weights,0.15)
 
     for k in [10000]:
         time_vals_alias_alias = []
