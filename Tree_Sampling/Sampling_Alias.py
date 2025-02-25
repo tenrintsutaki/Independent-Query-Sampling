@@ -8,7 +8,7 @@ def leaf_sampling_alias(node):
     if node.is_leaf():
         return node
     else:
-        return node.AS.sample()
+        return node.AS.sample_element()
 
 def leaf_sampling_alias_application(node):
     if node.is_leaf():
