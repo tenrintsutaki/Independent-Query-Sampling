@@ -4,6 +4,7 @@ class Tester():
         # 键，值，和允许结果偏差的百分量
         self.keys = keys
         self.weights = weights
+        self.sample_weights = weights
         self.time_dict = {key: 0 for key in keys}
         self.s = 0
         self.THRESHOLD = threshold
@@ -12,6 +13,7 @@ class Tester():
         self.time_dict[k] += 1
         self.s += 1
     def valid(self):
+        self.__remove_zeros_normalize()
         for k,v in self.time_dict.items():
             initial_index = self.keys.index(k)
             expected_value = self.weights[initial_index] * self.s
@@ -19,6 +21,13 @@ class Tester():
                 self.counter += 1
         print(f"The Validation Result is: {self.counter / len(self.keys)}")
         return self.counter / len(self.keys)
+    def __remove_zeros_normalize(self):
+        for k,v in self.time_dict.items():
+            # 一次没有被采样的k定义为out of the range.
+            if v == 0:
+                self.sample_weights[self.weights.index(k)] = 0
+                # 使得sample weight里面这个k的位置的权重归0
+
 
 if __name__ == "__main__":
     l1 = [1,2,3,4,5]
