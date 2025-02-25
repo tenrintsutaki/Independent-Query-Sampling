@@ -56,8 +56,8 @@ if __name__ == '__main__':
     leaf_count = 80
     chunk_size = 10
     x = 1
-    y = 60
-    k = 10000
+    y = 80
+    k = 2000000
 
     val_list = [x for x in range(1,leaf_count+1)]
     weight_list = [random.randint(1,100) for _ in range(1,leaf_count+1)]
@@ -84,8 +84,6 @@ if __name__ == '__main__':
     calculate_weight(root)
     update_internal_nodes(root)
     canonical,weights,l_align,r_align = find_paths_and_collect(root,x,y)
-    print(l_align)
-    print(r_align)
     # visualize_tree(root,canonical,l_align,r_align)
 
     #把末尾两个canonical变化一下
@@ -99,8 +97,12 @@ if __name__ == '__main__':
         sampled_chunk = leaf_sampling_alias(node) # Then use alias sampling to get the result\
         res = sampled_chunk.AS.sample_element()
         tester.add_record(res)
-        print(res)
     c = chunk_list[0]
-    print(f"Measure by asizeof: {asizeof.asizeof(c.AS)}")
-    print(f"Measure by Tenrin: {calculate_as_memory(c.AS)}")
-    tester.valid()
+    # print(f"Measure by asizeof: {asizeof.asizeof(c.AS)}")
+    # print(f"Measure by Tenrin: {calculate_as_memory(c.AS)}")
+    result_factors = tester.valid()
+    plt.figure(figsize=(10, 6))
+    plt.axhline(y=1, color='red', linestyle='-')
+    plt.ylim(0,2)
+    plt.scatter([i for i in range(len(result_factors))],result_factors)
+    plt.show()

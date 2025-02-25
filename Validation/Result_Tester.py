@@ -9,6 +9,7 @@ class Tester():
         self.s = 0
         self.THRESHOLD = threshold
         self.counter = 0
+        self.result_factors = []
     def add_record(self,k):
         self.time_dict[k] += 1
         self.s += 1
@@ -19,8 +20,10 @@ class Tester():
             expected_value = self.sample_weights[initial_index] * self.s
             if expected_value * (1 - self.THRESHOLD) <= v and expected_value * (1 + self.THRESHOLD) >= v:
                 self.counter += 1
+            if expected_value != 0:
+                self.result_factors.append(v / expected_value)
         print(f"The Validation Result is: {self.counter / len(self.keys)}")
-        return self.counter / len(self.keys)
+        return self.result_factors
     def __remove_zeros_normalize(self):
         for k,v in self.time_dict.items():
             # 一次没有被采样的k定义为out of the range.
@@ -31,6 +34,9 @@ class Tester():
         for i in range(len(self.sample_weights)):
             self.sample_weights[i] = self.sample_weights[i] / origin_sum
             # 权重逐个归一化
+
+    # def get_standard_validation_diagram(self):
+
 
 
 if __name__ == "__main__":

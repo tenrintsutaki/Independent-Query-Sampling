@@ -41,7 +41,7 @@ if __name__ == '__main__':
     # update_intervals(root)
     # build_AS_structure_direct_node(root)
     build_AS_structure(root) #BUILD AS
-    t = Tester(random_list, weights,0.15)
+    t = Tester(random_list, weights,0.1)
 
     for k in [10000]:
         time_vals_alias_alias = []
