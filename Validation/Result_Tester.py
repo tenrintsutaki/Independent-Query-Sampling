@@ -16,7 +16,7 @@ class Tester():
         self.__remove_zeros_normalize()
         for k,v in self.time_dict.items():
             initial_index = self.keys.index(k)
-            expected_value = self.weights[initial_index] * self.s
+            expected_value = self.sample_weights[initial_index] * self.s
             if expected_value * (1 - self.THRESHOLD) <= v and expected_value * (1 + self.THRESHOLD) >= v:
                 self.counter += 1
         print(f"The Validation Result is: {self.counter / len(self.keys)}")
@@ -27,6 +27,10 @@ class Tester():
             if v == 0:
                 self.sample_weights[self.weights.index(k)] = 0
                 # 使得sample weight里面这个k的位置的权重归0
+        for i in range(len(self.sample_weights)):
+            print(self.sample_weights[i])
+            self.sample_weights[i] = self.sample_weights[i] / sum(self.sample_weights[i])
+            # 权重逐个归一化
 
 
 if __name__ == "__main__":
