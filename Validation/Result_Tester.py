@@ -1,4 +1,6 @@
 import random
+import numpy as np
+from scipy.stats import chisquare
 class Tester():
     def __init__(self,keys,weights,threshold):
         # 键，值，和允许结果偏差的百分量
@@ -10,6 +12,7 @@ class Tester():
         self.THRESHOLD = threshold
         self.counter = 0
         self.result_factors = []
+        self.ex_dict = {}
     def add_record(self,k):
         self.time_dict[k] += 1
         self.s += 1
@@ -18,6 +21,7 @@ class Tester():
         for k,v in self.time_dict.items():
             initial_index = self.keys.index(k)
             expected_value = self.sample_weights[initial_index] * self.s
+            self.ex_dict[k] = expected_value
             if expected_value * (1 - self.THRESHOLD) <= v and expected_value * (1 + self.THRESHOLD) >= v:
                 self.counter += 1
             if expected_value != 0:
@@ -37,7 +41,23 @@ class Tester():
 
     # def get_standard_validation_diagram(self):
 
+    def chi_square_validation(self):
+        observed = []
+        expected = []
+        for k in self.time_dict.keys():
+            observed.append(self.time_dict[k])
+            expected.append(self.ex_dict[k])
+        chi2_stat, p_value = chisquare(f_obs=observed, f_exp=expected)
+        print(f"Chi_Square: {chi2_stat:.4f}")
+        print(f"P: {p_value:.4f}")
 
+        # 判断显著性（α=0.05）
+        alpha = 0.05
+        if p_value < alpha:
+            print("Rejection of the original hypothesis: frequency of observations is significantly different from theoretical expectations (possible problems with the algorithm))")
+        else:
+            print("Accept of the original hypothesis: frequency of observations is consistent with theoretical expectations (algorithm passes the test)")
+        return p_value
 
 if __name__ == "__main__":
     l1 = [1,2,3,4,5]

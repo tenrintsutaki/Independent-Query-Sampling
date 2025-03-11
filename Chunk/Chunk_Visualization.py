@@ -57,7 +57,7 @@ if __name__ == '__main__':
     chunk_size = 10
     x = 1
     y = 80
-    k = 2000000
+    k = 200000
 
     val_list = [x for x in range(1,leaf_count+1)]
     weight_list = [random.randint(1,100) for _ in range(1,leaf_count+1)]
@@ -105,4 +105,6 @@ if __name__ == '__main__':
     plt.axhline(y=1, color='red', linestyle='-')
     plt.ylim(0,2)
     plt.scatter([i for i in range(len(result_factors))],result_factors)
+    p_value = tester.chi_square_validation()
+    plt.title(f"Validation with p = {p_value}")
     plt.show()
