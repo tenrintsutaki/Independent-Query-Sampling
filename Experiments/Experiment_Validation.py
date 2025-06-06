@@ -1,5 +1,7 @@
 import time
 import pandas as pd
+from matplotlib import pyplot as plt
+
 from Tree_Sampling.Construction_Tools import *
 from Tree_Sampling.Sample_Tools import calculate_weight, update_internal_nodes
 from Tree_Sampling.Sampling import find_canonical_nodes_new, basic_sampling, leaf_sampling, find_canonical_nodes, \
@@ -27,7 +29,7 @@ def calculate_time_tree_alias_alias(root, selectivity, total_length,k,t):
 if __name__ == '__main__':
     # Test Methods of the Construction
 
-    num_nodes = 10000
+    num_nodes = 100000
     random_list = random_tree_assigned(num_nodes)
     weights = generate_random_weights(num_nodes)
 
@@ -43,14 +45,23 @@ if __name__ == '__main__':
     build_AS_structure(root) #BUILD AS
     t = Tester(random_list, weights,0.1)
 
-    for k in [10000]:
+    for k in [300000]:
         time_vals_alias_alias = []
         selectivity_vals = []
         round = 1
         extra_alias_memory = []
         for i in range(1,2):# ratio from 1% to 9%
-            selectivity = random.random()
+            selectivity = 0.6
             r_alias_alias = []
             for r in range(round):
                 time_cost,memory = calculate_time_tree_alias_alias(root, selectivity, num_nodes, k, t)
-    t.valid()
+    result_factors = t.valid()
+    print(result_factors)
+    plt.figure(figsize=(10, 6))
+    plt.axhline(y=1, color='red', linestyle='-')
+    plt.ylim(0,2)
+    plt.scatter([i for i in range(len(result_factors))],result_factors)
+    p_value = t.chi_square_validation()
+    plt.title(f"Validation with s = {k}")
+    # plt.title(f"Validation with s = {k}, p = {p_value}")
+    plt.show()

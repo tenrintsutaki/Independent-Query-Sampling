@@ -1,34 +1,37 @@
-import matplotlib.pyplot as plt
-import numpy as np
+from itertools import permutations
 
-# 数据
-months = ["Dec", "Jan", "Feb", "Mar", "Apr", "May"]
-cost = [260800, 378400, 203500, 277750, 197750, 44800]
-cumulative_cost = np.cumsum(cost)  # 累积成本
-print(sum(cost))
+if __name__ == '__main__':
+    class ListNode(object):
+        def __init__(self, val=0, next=None):
+            self.val = val
+            self.next = next
+    def reverseKGroup(head, k):
+        """
+        :type head: Optional[ListNode]
+        :type k: int
+        :rtype: Optional[ListNode]
+        """
+        dummy = head  # 1,2,3,4,5
+        copied = []
+        while dummy:
+            copied.append(dummy)
+            dummy = dummy.next
+        for i in range(0, len(copied), k):
+            if k == len(copied):
+                copied[i:i + k] = reversed(copied[i:i + k])
+                break
+            if i + k < len(copied):
+                copied[i:i + k] = reversed(copied[i:i + k])
+        for i in range(0, len(copied) - 1):
+            copied[i].next = copied[i + 1]
+        head = copied[0]
+        copied[-1].next = None
+        return copied[0]
 
-# 图形设置
-fig, ax1 = plt.subplots()
+n1 = ListNode(1)
+n1.next = ListNode(2)
 
-# 绘制柱状图 (蓝色)
-ax1.bar(months, cost, color="skyblue", label="Cost")
-ax1.set_ylabel("Cost ($)", fontsize=12)
-ax1.set_ylim(0, 400000)
-ax1.tick_params(axis="y", labelsize=10)
-ax1.legend(loc="upper left", fontsize=10)
-
-# 添加第二个 y 轴
-ax2 = ax1.twinx()
-ax2.plot(months, cumulative_cost, color="orange", marker="o", label="Cumulative Cost", linewidth=2)
-ax2.set_ylabel("Cumulative Cost ($)", fontsize=12, color="orange")
-ax2.set_ylim(0, 1500000)
-ax2.tick_params(axis="y", labelsize=10, colors="orange")
-ax2.legend(loc="upper right", fontsize=10)
-
-# 图标题和网格
-plt.title("Cost and Cumulative Cost", fontsize=14)
-plt.grid(axis="y", linestyle="--", alpha=0.7)
-
-# 显示图形
-plt.tight_layout()
-plt.show()
+res = reverseKGroup(n1, 2)
+while res:
+    print(res.val)
+    res = res.next

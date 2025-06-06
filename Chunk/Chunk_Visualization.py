@@ -60,7 +60,8 @@ if __name__ == '__main__':
     k = 10000
 
     val_list = [x for x in range(1,leaf_count+1)]
-    weight_list = [random.randint(1,100) for _ in range(1,leaf_count+1)]
+    print(val_list[400])
+    weight_list = [random.randint(50,100) for _ in range(1,leaf_count+1)]
     for i in range(len(weight_list)):
         weight_list[i] = weight_list[i] / sum(weight_list)
     chunk_list = build_chunk(val_list,weight_list,chunk_size)
