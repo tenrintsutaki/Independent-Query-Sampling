@@ -121,8 +121,8 @@ def generate_random_weights(num):
     normalized_weights = random_weights / total_weight
     return normalized_weights
 
-def generate_normal_like_weights(num):
-    random_weights = np.random.rand(num)
+def generate_normal_like_weights(lo,hi,num):
+    random_weights = np.random.uniform(lo,hi,num)
     total_weight = np.sum(random_weights)
     normalized_weights = random_weights / total_weight
     return normalized_weights

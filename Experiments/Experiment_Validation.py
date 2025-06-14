@@ -13,11 +13,11 @@ from Experiments.Exp_Generator import generate_random_interval
 from Experiment_Space import calculate_tree_memory
 from pympler import asizeof
 from Validation.Result_Tester import Tester
-
-def calculate_time_tree_alias_alias(root, selectivity, total_length,k,t):
+from Tree_Sampling.Construction_Tools import calculate_leaf_numbers
+def calculate_time_tree_alias_alias(root, random_list, selectivity, total_length,k,t):
     start = time.time()
     start_index,end_index = generate_random_interval(selectivity, total_length)
-    canonical, weights = find_paths_and_collect(root,start_index,end_index) # Find the canonical nodes
+    canonical, weights = find_paths_and_collect(root,random_list[start_index],random_list[end_index])
     basic_sampling_preprocess(canonical, weights)
     result,memory_overhead = alias_sampling(canonical, k) # Sample a canonical node firstly from AS Sampling*
     for node in result:
@@ -29,39 +29,33 @@ def calculate_time_tree_alias_alias(root, selectivity, total_length,k,t):
 if __name__ == '__main__':
     # Test Methods of the Construction
 
-    num_nodes = 100000
+    num_nodes = 50000
+    lo = 3
+    hi = 7
     random_list = random_tree_assigned(num_nodes)
-    weights = generate_random_weights(num_nodes)
-
-    process = psutil.Process(os.getpid())
-    memory_info = process.memory_info()
-    memory_cost_before_tree = memory_info.rss
-
+    weights = generate_normal_like_weights(lo,hi,num_nodes)
     root,leaf_index = construct_bst(random_list, weights, 0)
     calculate_weight(root)
     update_internal_nodes(root)
     # update_intervals(root)
     # build_AS_structure_direct_node(root)
     build_AS_structure(root) #BUILD AS
-    t = Tester(random_list, weights,0.1)
 
-    for k in [300000]:
-        time_vals_alias_alias = []
-        selectivity_vals = []
-        round = 1
-        extra_alias_memory = []
-        for i in range(1,2):# ratio from 1% to 9%
-            selectivity = 0.6
-            r_alias_alias = []
-            for r in range(round):
-                time_cost,memory = calculate_time_tree_alias_alias(root, selectivity, num_nodes, k, t)
-    result_factors = t.valid()
-    print(result_factors)
-    plt.figure(figsize=(10, 6))
-    plt.axhline(y=1, color='red', linestyle='-')
-    plt.ylim(0,2)
-    plt.scatter([i for i in range(len(result_factors))],result_factors)
-    p_value = t.chi_square_validation()
-    plt.title(f"Validation with s = {k}")
-    # plt.title(f"Validation with s = {k}, p = {p_value}")
-    plt.show()
+    for k in [2500000]:
+        t = Tester(random_list, weights, 0.1)
+        # for k in [10000, 50000, 100000, 500000]:
+        selectivity = 0.6
+        time_cost,memory = calculate_time_tree_alias_alias(root, random_list, selectivity, num_nodes, k, t)
+        result_factors = t.valid()
+        plt.figure(figsize=(10, 6))
+        plt.axhline(y=1, color='red', linestyle='-')
+        plt.ylim(0,2)
+        plt.scatter([i for i in range(len(result_factors))],result_factors)
+        plt.title(f"Validation N = {num_nodes} with s = {k}")
+        plt.ylabel("f (Factor)")
+        plt.xlabel("element")
+        print(len(result_factors))
+        # plt.title(f"Validation with s = {k}, p = {p_value}")
+        # plt.show()
+        plt.savefig(f"data/validation_figs/N_{num_nodes}_s_{k}_valid.png", dpi=300, bbox_inches="tight")  # 保存为 PNG 文件
+

@@ -11,7 +11,6 @@ from Sampling import find_canonical_nodes_new, basic_sampling, leaf_sampling, fi
 from Sampling_Alias import leaf_sampling_alias, alias_sampling, alias_sampling_direct
 from Experiments.Exp_Generator import generate_random_interval
 from Experiment_Space import calculate_tree_memory
-from Validation.Result_Tester import Tester
 
 
 def calculate_time_tree_sampling(root, selectivity, total_length,k):
@@ -38,7 +37,7 @@ def calculate_time_tree_alias(root, selectivity, total_length,k):
     # print(f"Time taken to sample {end - start} when selectivity is {selectivity} [Alias]")
     return end - start
 
-def calculate_time_tree_alias_alias(root, selectivity, total_length,k,t):
+def calculate_time_tree_alias_alias(root, selectivity, total_length,k):
     start = time.time()
     start_index,end_index = generate_random_interval(selectivity, total_length)
     canonical, weights,l_align,r_align = find_paths_and_collect(root, random_list[start_index], random_list[end_index]) # Find the canonical nodes
@@ -46,9 +45,7 @@ def calculate_time_tree_alias_alias(root, selectivity, total_length,k,t):
     basic_sampling_preprocess(canonical, weights)
     result = alias_sampling(canonical, k) # Sample a canonical node firstly from AS Sampling*
     for node in result:
-        sampled_chunk = leaf_sampling_alias(node)  # Then use alias sampling to get the result\
-        res = sampled_chunk.AS.sample_element() # Then use alias sampling to get the result
-        t.add_record(res)
+        leaf_sampling_alias(node) # Then use alias sampling to get the result
     end = time.time()
     # print(f"Time taken to sample {end - start} when selectivity is {selectivity} [Alias]")
     return end - start
@@ -64,7 +61,8 @@ def calculate_time_compare(root, selectivity, total_length,k):
 
 if __name__ == '__main__':
     # Test Methods of the Construction
-    num_nodes = 10000
+
+    num_nodes = 750000
     chunk_size = 100
     random_list = random_tree_assigned(num_nodes)
     weights = generate_random_weights(num_nodes)
@@ -73,50 +71,63 @@ if __name__ == '__main__':
     calculate_weight(root)
     update_internal_nodes(root)
     build_AS_structure(root) #BUILD AS
-    t = Tester(random_list, weights,0.15)
 
-    for k in [10000]:
+    for k in [1000]:
+        time_vals_canonical = []
+        time_vals_compare = []
+        time_vals_alias = []
         time_vals_alias_alias = []
         selectivity_vals = []
-        round = 1
+        round = 10
         extra_alias_memory = []
-        for i in range(1,2):
+        for i in range(1,100):# ratio from 1% to 9%
             selectivity = random.random()
+            r_canonical = []
+            r_compare = 0
+            r_alias = []
             r_alias_alias = []
             for r in range(round):
-                time_cost = calculate_time_tree_alias_alias(root, selectivity, num_nodes, k, t)
+                # r_canonical.append(calculate_time_tree_sampling(root, selectivity, num_nodes,k)) # calculate the running time
+                r_alias.append(calculate_time_tree_alias(root, selectivity, num_nodes, k))
+                time_cost = calculate_time_tree_alias_alias(root, selectivity, num_nodes, k)
                 r_alias_alias.append(time_cost)
+            time_vals_canonical.append(r_canonical)
+            time_vals_alias.append(r_alias)
             time_vals_alias_alias.append(r_alias_alias)
             selectivity_vals.append(selectivity)
         # Count the node amount in the interval
-        t.valid()
 
         x_values = []
         y_values = []
         y1_values = []
         y2_values = []
 
-        # for i, yi in enumerate(time_vals_alias):
+        # for i, yi in enumerate(time_vals_canonical):
         #     # 对于 y 中的每个子列表 yi，复制 x[i] 并与 yi 中的每个值配对
         #     x_values.extend([selectivity_vals[i]] * len(yi))
-        #     y1_values.extend(yi)
-        #
-        # for i, yi in enumerate(time_vals_alias_alias):
-        #     # 对于 y 中的每个子列表 yi，复制 x[i] 并与 yi 中的每个值配对
-        #     y2_values.extend(yi)
-        #
-        # data = {
-        #     'Selectivity': x_values,
-        #     # 'Tree_Traverse': y_values,
-        #     'Alias': y1_values,
-        #     'Double-Alias': y2_values
-        # }
-        #
-        # # 创建DataFrame
-        # df = pd.DataFrame(data)
-        #
-        # # 保存为CSV文件
-        # df.to_csv(f'data/N_{num_nodes}_s_{k}_chunk_{chunk_size}.csv', index=False)
+        #     y_values.extend(yi)
+
+        for i, yi in enumerate(time_vals_alias):
+            # 对于 y 中的每个子列表 yi，复制 x[i] 并与 yi 中的每个值配对
+            x_values.extend([selectivity_vals[i]] * len(yi))
+            y1_values.extend(yi)
+
+        for i, yi in enumerate(time_vals_alias_alias):
+            # 对于 y 中的每个子列表 yi，复制 x[i] 并与 yi 中的每个值配对
+            y2_values.extend(yi)
+
+        data = {
+            'Selectivity': x_values,
+            # 'Tree_Traverse': y_values,
+            'Alias': y1_values,
+            'Double-Alias': y2_values
+        }
+
+        # 创建DataFrame
+        df = pd.DataFrame(data)
+
+        # 保存为CSV文件
+        df.to_csv(f'data/N_{num_nodes}_s_{k}_chunk_{chunk_size}.csv', index=False)
 
     #
     # plt.figure(figsize=(5, 8))
