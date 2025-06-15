@@ -1,57 +1,42 @@
-import numpy as np
+import sys
+
+# data = sys.stdin.read().strip().split()
+# print(data)
 
 
-def rotate_vector(vector, deg_x, deg_y, deg_z):
-    """
-    将三维向量绕 x, y, z 轴旋转指定角度。
 
-    参数:
-        vector (np.array): 三维向量，形状为 (3,)
-        deg_x (float): 绕 x 轴旋转的角度（度）
-        deg_y (float): 绕 y 轴旋转的角度（度）
-        deg_z (float): 绕 z 轴旋转的角度（度）
+def quick_sort(ls):
+    if len(ls) <= 1:
+        return ls
+    pivot = ls[len(ls)//2]
+    left = [x for x in ls if x < pivot]
+    middle = [x for x in ls if x == pivot]
+    right = [x for x in ls if x > pivot]
+    return quick_sort(left) + middle + quick_sort(right)
 
-    返回:
-        np.array: 旋转后的三维向量
-    """
-    # 将角度转换为弧度
-    theta_x = np.radians(deg_x)
-    theta_y = np.radians(deg_y)
-    theta_z = np.radians(deg_z)
+def merge(left,right):
+    res = []
+    i = j = 0
+    while i < len(left) and j < len(right):
+        if left[i] < right[j]:
+            res.append(left[i])
+            i += 1
+        else:
+            res.append(right[j])
+            j += 1
+    res.extend(left[i:])
+    res.extend(right[j:])
+    return res
 
-    # 绕 x 轴旋转矩阵
-    Rx = np.array([
-        [1, 0, 0],
-        [0, np.cos(theta_x), -np.sin(theta_x)],
-        [0, np.sin(theta_x), np.cos(theta_x)]
-    ])
+def merge_sort(ls):
+    if len(ls) <= 1:
+        return ls
+    mid = len(ls) // 2
+    left = merge_sort(ls[:mid])
+    right = merge_sort(ls[mid:])
+    return merge(left,right)
 
-    # 绕 y 轴旋转矩阵
-    Ry = np.array([
-        [np.cos(theta_y), 0, np.sin(theta_y)],
-        [0, 1, 0],
-        [-np.sin(theta_y), 0, np.cos(theta_y)]
-    ])
-
-    # 绕 z 轴旋转矩阵
-    Rz = np.array([
-        [np.cos(theta_z), -np.sin(theta_z), 0],
-        [np.sin(theta_z), np.cos(theta_z), 0],
-        [0, 0, 1]
-    ])
-
-    # 组合旋转：先绕 z 轴，再绕 y 轴，最后绕 x 轴
-    rotated_vector = Rz @ Ry @ Rx @ vector
-    return rotated_vector
-
-
-# 示例
-vector = np.array([-3.4, -1.5, -3])  # 初始向量
-deg_x = 2  # 绕 x 轴旋转 45 度
-deg_y = -7  # 绕 y 轴旋转 30 度
-deg_z = 5  # 绕 z 轴旋转 60 度
-
-result = rotate_vector(vector, deg_x, deg_y, deg_z)
-print("旋转后的向量:", result)
-result = result + np.array([4.5, 3.5, 6])
-print("旋转后的向量:", result)
+if __name__ == '__main__':
+    ls = list(map(int, sys.stdin.readline().strip().split()))  # 读取第一行
+    print(quick_sort(ls))
+    print(merge_sort(ls))

@@ -101,7 +101,7 @@ def plot_IQS_4lines(df_chunk,df_normal,n,s):
 if __name__ == "__main__":
     # 读取 CSV 文件
     s = 1000
-    n = 750000
+    n = 250000
     file_name = f'N_{n}_s_{s}_chunk_100.csv'
     file_name_2 = f'N_{n}_s_{s}_.csv'
     df = pd.read_csv(file_name)
